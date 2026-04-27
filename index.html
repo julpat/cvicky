@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE RESTART</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0d1b2a;color:#e8f0fe;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#1a3a5c,#0d1b2a);padding:18px 20px 14px;text-align:center;border-bottom:1px solid #1e3a5f}
+header h1{font-size:1.2rem;font-weight:700}
+header p{font-size:.75rem;opacity:.6;margin-top:3px}
+#listScreen{flex:1;padding:16px;max-width:680px;width:100%;margin:0 auto}
+.start-all{width:100%;background:linear-gradient(135deg,#2e86c1,#1a5276);color:white;border:none;border-radius:14px;padding:18px;font-size:1.05rem;font-weight:700;cursor:pointer;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(46,134,193,.4)}
+.sec-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4a9fd4;margin:18px 0 8px}
+.card{background:#111e2f;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:white;flex-shrink:0}
+.breath .num{background:#1a5276}.core .num{background:#1e6e3e}.finish .num{background:#6e3b12}
+.card-title{flex:1}
+.card-title strong{display:block;font-size:.88rem}
+.card-title span{font-size:.73rem;color:#8aa8c8}
+.tag{font-size:.68rem;padding:3px 9px;border-radius:8px;font-weight:600;white-space:nowrap}
+.tb{background:#0d2a44;color:#7fc7f5}.tc{background:#0d2a1a;color:#7fcc89}.ts{background:#2a1a0d;color:#ffc87a}
+.chev{color:#4a6a8a;font-size:.7rem;margin-left:4px;transition:transform .25s}
+.open .chev{transform:rotate(180deg)}
+.card-body{display:none;padding:0 14px 14px;border-top:1px solid #1e3a5f}
+.card-body.vis{display:block}
+.steps{margin-top:8px;list-style:none}
+.steps li{font-size:.8rem;line-height:1.5;padding:5px 0 5px 26px;position:relative;border-bottom:1px solid #1e3a5f;color:#c0d8f0}
+.steps li:last-child{border-bottom:none}
+.steps li::before{content:attr(data-n);position:absolute;left:0;top:7px;width:18px;height:18px;border-radius:50%;font-size:.65rem;font-weight:700;color:white;display:flex;align-items:center;justify-content:center}
+.breath .steps li::before{background:#1a5276}.core .steps li::before{background:#1e6e3e}.finish .steps li::before{background:#6e3b12}
+.tip{background:#1a2a1a;border-left:3px solid #27ae60;border-radius:0 8px 8px 0;padding:7px 10px;margin-top:8px;font-size:.78rem;color:#7fcc89;line-height:1.5}
+.yt{display:inline-flex;align-items:center;gap:5px;margin-top:10px;background:#8b0000;color:white;border:none;border-radius:7px;padding:7px 12px;font-size:.75rem;font-weight:600;text-decoration:none}
+#timerScreen{display:none;flex-direction:column;align-items:center;flex:1;padding:20px 16px;max-width:480px;width:100%;margin:0 auto}
+.phase{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:10px}
+.ph-active{background:#1a5276;color:#7fc7f5}.ph-prep{background:#4a2c00;color:#ffc87a}
+.t-name{font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:3px;min-height:2.2rem;display:flex;align-items:center;justify-content:center}
+.t-sub{font-size:.78rem;color:#8aa8c8;text-align:center;margin-bottom:18px}
+.ring-wrap{position:relative;width:200px;height:200px;margin-bottom:18px}
+.ring-wrap svg{transform:rotate(-90deg)}
+#ringFill{stroke:#2e86c1;stroke-dasharray:565;stroke-dashoffset:0;transition:stroke-dashoffset .9s linear,stroke .4s}
+.ring-time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-time .big{font-size:3rem;font-weight:700;line-height:1}
+.ring-time .lbl{font-size:.7rem;color:#8aa8c8;margin-top:4px;letter-spacing:1px}
+.dots{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}
+.dot{width:10px;height:10px;border-radius:50%;background:#1e3a5f;transition:background .3s,transform .3s}
+.dot.active{background:#2e86c1;transform:scale(1.3)}.dot.done{background:#27ae60}
+.ctrls{display:flex;gap:10px;margin-bottom:16px}
+.btn{border:none;border-radius:50px;font-weight:700;cursor:pointer;padding:13px 22px;font-size:.88rem;display:flex;align-items:center;gap:6px}
+.btn-main{background:#2e86c1;color:white}.btn-skip{background:#1e3a5f;color:#8aa8c8}.btn-stop{background:#4a1010;color:#f1948a}
+.info-panel{background:#111e2f;border-radius:12px;padding:12px 16px;width:100%;font-size:.82rem;line-height:1.6;color:#b0c8e0}
+.info-panel .lbl{color:#8aa8c8;font-size:.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.info-steps{list-style:none}
+.info-steps li{font-size:.8rem;line-height:1.5;padding:5px 0 5px 26px;position:relative;border-bottom:1px solid #1e3a5f;color:#c0d8f0}
+.info-steps li:last-child{border-bottom:none}
+.info-steps li::before{content:attr(data-n);position:absolute;left:0;top:7px;width:18px;height:18px;border-radius:50%;background:#1a5276;font-size:.65rem;font-weight:700;color:white;display:flex;align-items:center;justify-content:center}
+.info-tip{background:#1a2a1a;border-left:3px solid #27ae60;border-radius:0 8px 8px 0;padding:7px 10px;margin-top:8px;font-size:.78rem;color:#7fcc89;line-height:1.5}
+.next-panel{background:#111e2f;border-radius:12px;padding:10px 16px;width:100%;margin-top:8px;font-size:.82rem}
+.next-panel .lbl{color:#8aa8c8;font-size:.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.next-panel .val{font-weight:600}
+#doneScreen{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:30px;text-align:center}
+#doneScreen .trophy{font-size:4rem;margin-bottom:16px}
+#doneScreen h2{font-size:1.4rem;margin-bottom:8px}
+#doneScreen p{color:#8aa8c8;font-size:.9rem;margin-bottom:24px;line-height:1.6}
+.btn-home{background:#2e86c1;color:white;border:none;border-radius:50px;padding:14px 32px;font-size:1rem;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏋️ CORE RESTART – Denní trénink</h1>
+  <p>Dýchání · McKenzie · Střed těla · Síla · ~32 min</p>
+</header>
+
+<div id="listScreen">
+  <button class="start-all" onclick="startWorkout()">▶ Spustit celý trénink</button>
+
+  <div class="sec-lbl">🫁 Část 1 – Dýchání &amp; mobilizace</div>
+
+  <div class="card breath">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">1</div>
+      <div class="card-title"><strong>Brániční dech vleže</strong><span>Aktivace bránice · základ všeho</span></div>
+      <div class="tag tb">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Leh na záda, nohy pokrč. Ruku na břicho, druhou na hrudník.</li>
+        <li data-n="2">Nádech nosem – zvedá se ruka na břiše, hrudník klidný.</li>
+        <li data-n="3">Výdech ústy – pomalý a delší než nádech. Tempo: 4 doby nádech / 6 dob výdech.</li>
+        <li data-n="4">Opakuj plynule celé 2 minuty.</li>
+      </ol>
+      <div class="tip">💡 Pokud se zvedá hrudník, zkus dýchat do zad – bránice se rozrůstá do všech stran.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=brani%C4%8Dn%C3%AD+d%C3%BDch%C3%A1n%C3%AD+cvi%C4%8Den%C3%AD" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card breath">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">2</div>
+      <div class="card-title"><strong>Brániční dech vsedě</strong><span>Přenos do každodenní polohy</span></div>
+      <div class="tag tb">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Sedni na pevnou židli, záda rovně, ramena dolů.</li>
+        <li data-n="2">Nádech nosem – břicho dopředu i do stran.</li>
+        <li data-n="3">Výdech ústy – pomalý a kontrolovaný, břicho se vrací.</li>
+        <li data-n="4">Opakuj 15–20 cyklů plynule.</li>
+      </ol>
+      <div class="tip">💡 Správný brániční dech vsedě vytváří přirozený korzet páteře v každodenním životě.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=brani%C4%8Dn%C3%AD+d%C3%BDch%C3%A1n%C3%AD+vsed%C4%9B" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">3</div>
+      <div class="card-title"><strong>McKenzie extenze</strong><span>Mobilizace a regenerace L5-S1</span></div>
+      <div class="tag tc">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Lehni na břicho, ruce polož pod ramena. Nohy volně nataženy, pánev uvolněna.</li>
+        <li data-n="2">Začni opřením o předloktí – mírný záklon. Pánev zůstává na podložce. Vydrž 10–15 s.</li>
+        <li data-n="3">Postupně přejdi na dlaně pro větší záklon, pokud cítíš úlevu a ne bolest.</li>
+        <li data-n="4">Pomalu se vrať dolů a opakuj. Při vystřelování do nohy okamžitě zastav!</li>
+      </ol>
+      <div class="tip">💡 Po třech měsících od výhřezu L5-S1 je extenze bezpečná. Pohyb musí být pomalý a plynulý.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=McKenzie+extenze+v%C3%BDh%C5%99ez+plot%C3%A9nky" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="sec-lbl">💪 Část 2 – Střed těla</div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">4</div>
+      <div class="card-title"><strong>Podsazení pánve</strong><span>Aktivace hlubokých břišních svalů</span></div>
+      <div class="tag tc">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Leh na záda, nohy pokrčeny, chodidla na šířku boků.</li>
+        <li data-n="2">S výdechem podsaď pánev – záda přitlač k podložce, napni břicho.</li>
+        <li data-n="3">Podrž 3–5 s, uvolni s nádechem. Pohyb malý a vědomý.</li>
+      </ol>
+      <div class="tip">💡 Zapojuješ příčný břišní sval – hlavní stabilizátor páteře.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=podsazen%C3%AD+p%C3%A1nve+cvik" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">5</div>
+      <div class="card-title"><strong>Mrtvý brouk (Dead Bug)</strong><span>Koordinace a stabilizace páteře</span></div>
+      <div class="tag tc">⏱ 3 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Leh na záda, nohy v 90°, ruce ke stropu. Záda přitlač k podložce.</li>
+        <li data-n="2">S výdechem spusť pravou ruku nad hlavu a levou nohu k zemi.</li>
+        <li data-n="3">Záda se nesmí odlepit! Vrať zpět, vystřídej strany.</li>
+      </ol>
+      <div class="tip">💡 Zmenši rozsah pohybu, pokud se záda odlepují od podložky.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=mrtv%C3%BD+brouk+dead+bug+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">6</div>
+      <div class="card-title"><strong>Pták-pes (Bird Dog)</strong><span>Hluboké svaly páteře a koordinace</span></div>
+      <div class="tag tc">⏱ 3 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Na čtyřech – ruce pod rameny, kolena pod kyčlemi. Záda rovně.</li>
+        <li data-n="2">S výdechem natáhni pravou ruku a levou nohu – přímá linie.</li>
+        <li data-n="3">Neprohýbej se, nevytáčej kyčle. Vydrž 3–5 s, vystřídej.</li>
+      </ol>
+      <div class="tip">💡 Představ si sklenici vody na zádech – nesmí se přelít.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=pt%C3%A1k+pes+bird+dog+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">7</div>
+      <div class="card-title"><strong>Most (Bridge)</strong><span>Aktivace hýždí a stabilizace pánve</span></div>
+      <div class="tag tc">⏱ 3 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Leh na záda, kolena pokrčená, chodidla na šířku boků, ruce podél těla.</li>
+        <li data-n="2">S výdechem zpevni hýždě a zvedni pánev – linie od ramen po kolena.</li>
+        <li data-n="3">Vydrž 2–3 s, pomalu spouštěj obratel po obratli.</li>
+      </ol>
+      <div class="tip">💡 Pocit by měl být hlavně v hýždích, ne v bederní páteři.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=most+bridge+cvik+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="sec-lbl">🔥 Část 3 – Silové cviky</div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">8</div>
+      <div class="card-title"><strong>Kliky na kolenou</strong><span>Horní část těla a střed</span></div>
+      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Klekni na čtyři, ruce přesuň dopředu. Tělo v přímé linii od kolen po ramena.</li>
+        <li data-n="2">Ruce na šířku ramen, zpevni břicho a hýždě.</li>
+        <li data-n="3">S nádechem ohýbej lokty a spouštěj hrudník k zemi.</li>
+        <li data-n="4">S výdechem se vytlač zpět. Opakuj po celou minutu.</li>
+      </ol>
+      <div class="tip">💡 Nezakláněj hlavu – drž ji v prodloužení páteře.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=kliky+na+kolen%C3%ADch+technika" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">9</div>
+      <div class="card-title"><strong>Side plank – levý bok</strong><span>Šikmé břišní svaly a stabilita</span></div>
+      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Lehni na levý bok, opři se o levé předloktí. Loket přímo pod ramenem.</li>
+        <li data-n="2">Nohy na sobě nebo pokrčené pro lehčí variantu.</li>
+        <li data-n="3">Zvedni boky – tělo v přímé linii od hlavy po nohy.</li>
+        <li data-n="4">Dýchej plynule bránicí a drž po celou minutu.</li>
+      </ol>
+      <div class="tip">💡 Pokud je příliš těžké, pokrč nohy. Kvalita polohy je důležitější než délka výdrže.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=side+plank+bo%C4%8Dn%C3%AD+prkno+technika" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">10</div>
+      <div class="card-title"><strong>Side plank – pravý bok</strong><span>Šikmé břišní svaly a stabilita</span></div>
+      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Lehni na pravý bok, opři se o pravé předloktí. Loket přímo pod ramenem.</li>
+        <li data-n="2">Nohy na sobě nebo pokrčené pro lehčí variantu.</li>
+        <li data-n="3">Zvedni boky – tělo v přímé linii od hlavy po nohy.</li>
+        <li data-n="4">Dýchej plynule bránicí a drž po celou minutu.</li>
+      </ol>
+      <div class="tip">💡 Stejná technika jako levý bok – věnuj oběma stranám stejnou péči.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=side+plank+bo%C4%8Dn%C3%AD+prkno+technika" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">11</div>
+      <div class="card-title"><strong>Tlačení do nohou vleže</strong><span>Hluboké břišní svaly – isometrická aktivace</span></div>
+      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Leh na záda, zvedni nohy do 90°. Kolena nad kyčlemi.</li>
+        <li data-n="2">Ruce polož na kolena.</li>
+        <li data-n="3">S výdechem tlač rukama proti kolenům a koleny proti rukám – silou, ale bez pohybu.</li>
+        <li data-n="4">Drž napětí 5 s, s nádechem uvolni. Záda přitlačena k podložce. Opakuj.</li>
+      </ol>
+      <div class="tip">💡 Isometrický cvik – pohyb nevidíš, ale svaly pracují naplno. Skvělý pro hluboké svaly břicha.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=isometric+core+press+knee+hand" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">12</div>
+      <div class="card-title"><strong>Superman</strong><span>Vzpřimovače páteře a zadní řetězec</span></div>
+      <div class="tag tc">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Lehni na břicho, ruce natáhni před sebe, nohy nataženy.</li>
+        <li data-n="2">S výdechem zvedni současně obě ruce a obě nohy co nejvýše.</li>
+        <li data-n="3">Vydrž 3–5 s, dýchej. Cítíš napětí podél celé páteře a v hýždích.</li>
+        <li data-n="4">S nádechem se pomalu sniž zpět. Krátce uvolni a opakuj.</li>
+      </ol>
+      <div class="tip">💡 Nezakláněj prudce hlavu – pohled míří k podložce. Pokud bolí záda, zvedej jen nohy nebo jen ruce zvlášť.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=superman+cvik+z%C3%A1da+vzp%C5%99imova%C4%8De" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card core">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">13</div>
+      <div class="card-title"><strong>Klasické kliky</strong><span>Horní část těla, střed a stabilizace</span></div>
+      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Opři se o dlaně a špičky nohou. Ruce na šířku ramen, tělo v přímé linii.</li>
+        <li data-n="2">Zpevni břicho, hýždě a stehna.</li>
+        <li data-n="3">S nádechem ohýbej lokty a spouštěj hrudník k zemi.</li>
+        <li data-n="4">S výdechem se vytlač zpět. Pokud klesá kvalita, přejdi na kliky na kolenou.</li>
+      </ol>
+      <div class="tip">💡 Záda se nesmí prohýbat ani hrbatět. Raději méně opakování správně.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=klasick%C3%A9+kliky+spr%C3%A1vn%C3%A1+technika" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="sec-lbl">🌿 Část 4 – Uvolnění</div>
+
+  <div class="card finish">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">14</div>
+      <div class="card-title"><strong>Kočka-Kráva</strong><span>Mobilizace celé páteře</span></div>
+      <div class="tag ts">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Na čtyřech – ruce pod rameny, kolena pod kyčlemi.</li>
+        <li data-n="2">Výdech – vyhrb záda do kulatého oblouku, hlava dolů. Kočka.</li>
+        <li data-n="3">Nádech – prohni záda dolů, hlava a ocas nahoru. Kráva.</li>
+        <li data-n="4">Střídej plynule po celé 2 minuty.</li>
+      </ol>
+      <div class="tip">💡 Pohyb vychází z celé páteře od kostrče až po krk. Synchronizuj s dechem.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=ko%C4%8Dka+kr%C3%A1va+mobilizace+p%C3%A1te%C5%99e" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+
+  <div class="card finish">
+    <div class="card-hdr" onclick="toggleCard(this)">
+      <div class="num">15</div>
+      <div class="card-title"><strong>Pozice dítěte</strong><span>Závěrečné uvolnění bederní páteře</span></div>
+      <div class="tag ts">⏱ 2 min</div><span class="chev">▼</span>
+    </div>
+    <div class="card-body">
+      <ol class="steps">
+        <li data-n="1">Z čtyřnožky sedni na paty, ruce natáhni dopředu, čelo na podložce.</li>
+        <li data-n="2">Uvolni celé tělo, ramena klesají k zemi.</li>
+        <li data-n="3">Dýchej bránicí do zad – při nádechu cítíš roztahování v bederní oblasti.</li>
+        <li data-n="4">Zůstaň a plynule dýchej po celé 2 minuty.</li>
+      </ol>
+      <div class="tip">💡 Vědomý brániční dech v pozici dítěte – propojení dechu s uvolněním páteře.</div>
+      <a class="yt" href="https://www.youtube.com/results?search_query=pozice+d%C3%ADt%C4%9Bte+protazen%C3%AD+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
+    </div>
+  </div>
+</div>
+
+<!-- TIMER -->
+<div id="timerScreen">
+  <div class="phase ph-prep" id="phaseBadge">PAUZA</div>
+  <div class="t-name" id="tName">Připrav se!</div>
+  <div class="t-sub" id="tSub"></div>
+  <div class="ring-wrap">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="90" fill="none" stroke="#1e3a5f" stroke-width="12"/>
+      <circle id="ringFill" cx="100" cy="100" r="90" fill="none" stroke-width="12" stroke-linecap="round"/>
+    </svg>
+    <div class="ring-time">
+      <div class="big" id="ringNum">15</div>
+      <div class="lbl">SEKUND</div>
+    </div>
+  </div>
+  <div class="dots" id="dotsRow"></div>
+  <div class="ctrls">
+    <button class="btn btn-main" id="pauseBtn" onclick="togglePause()">⏸ Pauza</button>
+    <button class="btn btn-skip" onclick="skip()">⏭ Přeskočit</button>
+    <button class="btn btn-stop" onclick="stopWorkout()">✕ Konec</button>
+  </div>
+  <div class="info-panel">
+    <div class="lbl" id="instrLabel">Instrukce</div>
+    <div id="instrText"></div>
+  </div>
+  <div class="next-panel">
+    <div class="lbl">Příště</div>
+    <div class="val" id="nextVal">—</div>
+  </div>
+</div>
+
+<!-- DONE -->
+<div id="doneScreen">
+  <div class="trophy">🏆</div>
+  <h2>Trénink splněn!</h2>
+  <p>Výborná práce!<br>Pravidelností dosáhneš výsledků.<br>Zítra zase! 💪</p>
+  <button class="btn-home" onclick="goHome()">↩ Zpět na přehled</button>
+</div>
+
+<script>
+var EX = [
+  { name:'Brániční dech vleže', sub:'Část 1 – Dýchání', sec:120,
+    steps:['Leh na záda, nohy pokrč. Ruku na břicho, druhou na hrudník.','Nádech nosem – zvedá se ruka na břiše, hrudník klidný.','Výdech ústy – pomalý a delší. Tempo: čtyři doby nádech, šest dob výdech.','Opakuj plynule celé dvě minuty.'],
+    tip:'Pokud se zvedá hrudník, zkus dýchat do zad. Bránice se rozrůstá do všech stran.',
+    prep:'Lehni si na záda a pokrč nohy. Polož jednu ruku na břicho a druhou na hrudník.' },
+
+  { name:'Brániční dech vsedě', sub:'Část 1 – Dýchání', sec:120,
+    steps:['Sedni na pevnou židli, záda rovně, ramena dolů.','Nádech nosem – břicho dopředu i do stran.','Výdech ústy – pomalý a kontrolovaný, břicho se vrací.','Opakuj patnáct až dvacet cyklů plynule.'],
+    tip:'Správný brániční dech vsedě vytváří přirozený korzet páteře v každodenním životě.',
+    prep:'Přesuň se na pevnou židli. Sedni rovně, ramena uvolni dolů.' },
+
+  { name:'McKenzie extenze', sub:'Část 1 – Mobilizace L5-S1', sec:120,
+    steps:['Lehni na břicho, ruce polož pod ramena. Nohy volně nataženy, pánev uvolněna.','Začni opřením o předloktí, mírný záklon. Pánev zůstává na podložce. Vydrž deset až patnáct sekund.','Postupně přejdi na dlaně pro větší záklon, pokud cítíš úlevu a ne bolest.','Pomalu se vrať dolů a opakuj. Při vystřelování do nohy okamžitě zastav.'],
+    tip:'Po třech měsících od výhřezu L5-S1 je extenze bezpečná a prospěšná. Pohyb musí být pomalý a plynulý.',
+    prep:'Lehni si na břicho a polož ruce pod ramena.' },
+
+  { name:'Podsazení pánve', sub:'Část 2 – Střed těla', sec:120,
+    steps:['Leh na záda, nohy pokrčeny, chodidla na šířku boků.','S výdechem podsaď pánev – záda přitlač k podložce, napni břicho.','Podrž tři až pět sekund, uvolni s nádechem. Pohyb malý a vědomý.'],
+    tip:'Zapojuješ příčný břišní sval, hlavní stabilizátor páteře.',
+    prep:'Lehni si na záda, pokrč nohy, chodidla na šířku boků.' },
+
+  { name:'Mrtvý brouk', sub:'Část 2 – Střed těla', sec:180,
+    steps:['Leh na záda, nohy v devadesáti stupních, ruce ke stropu. Záda přitlač k podložce.','S výdechem spusť pravou ruku nad hlavu a zároveň levou nohu k zemi.','Záda se nesmí odlepit od podložky. Vrať zpět a vystřídej strany.'],
+    tip:'Zmenši rozsah pohybu, pokud se záda odlepují.',
+    prep:'Zůstaň na zádech. Zvedni nohy do devadesáti stupňů a natáhni ruce ke stropu.' },
+
+  { name:'Pták pes', sub:'Část 2 – Střed těla', sec:180,
+    steps:['Klekni na čtyři. Ruce pod rameny, kolena pod kyčlemi, záda rovně.','S výdechem natáhni pravou ruku dopředu a zároveň levou nohu dozadu. Přímá linie.','Nevytáčej kyčle, neprohýbej záda. Vydrž tři až pět sekund, vrať zpět a vystřídej.'],
+    tip:'Představ si sklenici vody na zádech, nesmí se přelít.',
+    prep:'Přesuň se na čtyři. Ruce pod rameny, kolena pod kyčlemi. Záda rovně.' },
+
+  { name:'Most', sub:'Část 2 – Střed těla', sec:180,
+    steps:['Leh na záda, kolena pokrčená, chodidla na šířku boků, ruce podél těla.','S výdechem zpevni hýždě a zvedni pánev nahoru. Přímka od ramen po kolena.','Vydrž dvě až tři sekundy. Pomalu spouštěj obratel po obratli dolů.'],
+    tip:'Pocit by měl být hlavně v hýždích, ne v bederní páteři.',
+    prep:'Lehni si na záda, pokrč kolena, chodidla na šířku boků. Ruce podél těla.' },
+
+  { name:'Kliky na kolenou', sub:'Část 3 – Silové cviky', sec:60,
+    steps:['Klekni na čtyři, ruce přesuň dopředu. Tělo v přímé linii od kolen po ramena.','Ruce na šířku ramen, zpevni břicho a hýždě.','S nádechem ohýbej lokty a spouštěj hrudník k zemi.','S výdechem se vytlač zpět. Opakuj po celou minutu.'],
+    tip:'Nezakláněj hlavu, drž ji v prodloužení páteře.',
+    prep:'Klekni na čtyři a ruce přesuň dopředu před sebe.' },
+
+  { name:'Side plank levý bok', sub:'Část 3 – Silové cviky', sec:60,
+    steps:['Lehni na levý bok, opři se o levé předloktí. Loket přímo pod ramenem.','Nohy na sobě nebo pokrčené pro lehčí variantu.','Zvedni boky. Tělo v přímé linii od hlavy po nohy.','Dýchej plynule bránicí a drž po celou minutu.'],
+    tip:'Pokud je příliš těžké, pokrč nohy. Kvalita polohy je důležitější než délka výdrže.',
+    prep:'Lehni si na levý bok a opři se o levé předloktí.' },
+
+  { name:'Side plank pravý bok', sub:'Část 3 – Silové cviky', sec:60,
+    steps:['Lehni na pravý bok, opři se o pravé předloktí. Loket přímo pod ramenem.','Nohy na sobě nebo pokrčené pro lehčí variantu.','Zvedni boky. Tělo v přímé linii od hlavy po nohy.','Dýchej plynule bránicí a drž po celou minutu.'],
+    tip:'Stejná technika jako levý bok. Věnuj oběma stranám stejnou péči.',
+    prep:'Otočse na pravý bok a opři se o pravé předloktí.' },
+
+  { name:'Tlačení do nohou vleže', sub:'Část 3 – Silové cviky', sec:60,
+    steps:['Leh na záda, zvedni nohy do devadesáti stupňů. Kolena nad kyčlemi.','Ruce polož na kolena.','S výdechem tlač rukama proti kolenům a koleny proti rukám. Silou, ale bez pohybu.','Drž napětí pět sekund, s nádechem uvolni. Záda přitlačena k podložce. Opakuj.'],
+    tip:'Isometrický cvik. Pohyb nevidíš, ale svaly pracují naplno.',
+    prep:'Lehni na záda a zvedni nohy do devadesáti stupňů.' },
+
+  { name:'Superman', sub:'Část 3 – Silové cviky', sec:120,
+    steps:['Lehni na břicho, ruce natáhni před sebe, nohy nataženy.','S výdechem zvedni současně obě ruce a obě nohy co nejvýše.','Vydrž tři až pět sekund. Cítíš napětí podél celé páteře a v hýždích.','S nádechem se pomalu sniž zpět. Krátce uvolni a opakuj.'],
+    tip:'Nezakláněj prudce hlavu, pohled míří k podložce. Pokud bolí záda, zvedej jen nohy nebo jen ruce zvlášť.',
+    prep:'Lehni na břicho, ruce natáhni před sebe, nohy nataženy.' },
+
+  { name:'Klasické kliky', sub:'Část 3 – Silové cviky', sec:60,
+    steps:['Opři se o dlaně a špičky nohou. Ruce na šířku ramen, tělo v přímé linii.','Zpevni břicho, hýždě a stehna.','S nádechem ohýbej lokty a spouštěj hrudník k zemi.','S výdechem se vytlač zpět. Pokud klesá kvalita, přejdi na kliky na kolenou.'],
+    tip:'Záda se nesmí prohýbat ani hrbatět. Raději méně opakování správně.',
+    prep:'Přejdi do pozice kliku. Ruce na šířku ramen, tělo jako prkno.' },
+
+  { name:'Kočka kráva', sub:'Část 4 – Uvolnění', sec:120,
+    steps:['Na čtyřech. Ruce pod rameny, kolena pod kyčlemi.','S výdechem vyhrb záda do kulatého oblouku, hlava dolů. To je kočka.','S nádechem prohni záda dolů, hlava a ocas nahoru. To je kráva.','Střídej plynule po celé dvě minuty.'],
+    tip:'Pohyb vychází z celé páteře od kostrče až po krk. Synchronizuj přesně s dechem.',
+    prep:'Přesuň se na čtyři na podložce. Ruce pod rameny, kolena pod kyčlemi.' },
+
+  { name:'Pozice dítěte', sub:'Část 4 – Uvolnění', sec:120,
+    steps:['Z čtyřnožky sedni na paty, ruce natáhni dopředu, čelo na podložce.','Uvolni celé tělo, ramena klesají k zemi.','Dýchej bránicí do zad. Při nádechu cítíš roztahování v bederní oblasti.','Zůstaň a plynule dýchej po celé dvě minuty.'],
+    tip:'Vědomý brániční dech v pozici dítěte. Skvělé propojení dechu s uvolněním páteře.',
+    prep:'Zůstaň na čtyřech. Za chvíli dosedneš na paty a natáhneš ruce dopředu.' }
+];
+
+var MIN_PREP = 15;
+var idx = 0, timeLeft = 0, paused = false, inPrep = true, tid = null, last30 = -1;
+var wakeLock = null;
+
+function prepDur(ex) {
+  var txt = ex.name + ' ' + ex.steps.join(' ');
+  return Math.max(MIN_PREP, Math.ceil(txt.length / 11) + 2);
+}
+
+function speak(txt, cancel) {
+  if (!window.speechSynthesis) return;
+  if (cancel) window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'cs-CZ'; u.rate = 1.05;
+  window.speechSynthesis.speak(u);
+}
+function cancelSpeech() { if (window.speechSynthesis) window.speechSynthesis.cancel(); }
+
+function showScreen(s) {
+  document.getElementById('listScreen').style.display  = s === 'list'  ? 'block' : 'none';
+  document.getElementById('timerScreen').style.display = s === 'timer' ? 'flex'  : 'none';
+  document.getElementById('doneScreen').style.display  = s === 'done'  ? 'flex'  : 'none';
+}
+
+function buildDots() {
+  var row = document.getElementById('dotsRow');
+  row.innerHTML = '';
+  for (var i = 0; i < EX.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot' + (i < idx ? ' done' : i === idx ? ' active' : '');
+    row.appendChild(d);
+  }
+}
+
+function renderInstr() {
+  var ex = EX[idx];
+  var lbl = document.getElementById('instrLabel');
+  var div = document.getElementById('instrText');
+  div.innerHTML = '';
+  if (inPrep) {
+    lbl.textContent = 'Připrav polohu';
+    div.textContent = ex.prep;
+  } else {
+    lbl.textContent = 'Instrukce';
+    var ol = document.createElement('ol');
+    ol.className = 'info-steps';
+    for (var i = 0; i < ex.steps.length; i++) {
+      var li = document.createElement('li');
+      li.setAttribute('data-n', i + 1);
+      li.textContent = ex.steps[i];
+      ol.appendChild(li);
+    }
+    var tip = document.createElement('div');
+    tip.className = 'info-tip';
+    tip.textContent = '💡 ' + ex.tip;
+    div.appendChild(ol);
+    div.appendChild(tip);
+  }
+}
+
+function render() {
+  var ex = EX[idx];
+  var dur = inPrep ? prepDur(ex) : ex.sec;
+  var ratio = timeLeft / dur;
+  var badge = document.getElementById('phaseBadge');
+  badge.className = 'phase ' + (inPrep ? 'ph-prep' : 'ph-active');
+  badge.textContent = inPrep ? 'PAUZA' : ex.sub.toUpperCase();
+  document.getElementById('tName').textContent = inPrep ? (idx === 0 ? 'Připrav se!' : 'Příprava') : ex.name;
+  document.getElementById('tSub').textContent  = inPrep ? 'Cvik ' + (idx+1) + ': ' + ex.name : 'Cvik ' + (idx+1) + ' / ' + EX.length;
+  document.getElementById('ringNum').textContent = timeLeft;
+  document.getElementById('ringFill').style.strokeDashoffset = String(565 * (1 - ratio));
+  document.getElementById('ringFill').style.stroke = inPrep ? '#f39c12' : '#2e86c1';
+  document.getElementById('nextVal').textContent = inPrep ? ex.name : (idx < EX.length - 1 ? EX[idx+1].name : '🏁 Konec tréninku');
+  renderInstr();
+  buildDots();
+}
+
+function tick() {
+  if (paused) return;
+  timeLeft--;
+  if (!inPrep) {
+    if (timeLeft > 10 && timeLeft % 30 === 0 && timeLeft !== last30) {
+      last30 = timeLeft;
+      speak('Zbývá ' + timeLeft + ' sekund');
+    }
+    if (timeLeft <= 10 && timeLeft > 0) speak(String(timeLeft), true);
+  }
+  if (inPrep && timeLeft <= 3 && timeLeft > 0) speak(String(timeLeft), true);
+  if (timeLeft <= 0) { advance(); return; }
+  render();
+}
+
+function advance() {
+  if (inPrep) {
+    inPrep = false;
+    timeLeft = EX[idx].sec;
+    last30 = -1;
+    speak('Začínáme. ' + EX[idx].name + '.', true);
+    render();
+    return;
+  }
+  idx++;
+  if (idx >= EX.length) {
+    clearInterval(tid);
+    cancelSpeech();
+    releaseWakeLock();
+    speak('Trénink splněn. Výborná práce!', true);
+    setTimeout(function() { showScreen('done'); }, 800);
+    return;
+  }
+  inPrep = true;
+  timeLeft = prepDur(EX[idx]);
+  speak('Výborně! Příští cvik: ' + EX[idx].name + '. ' + EX[idx].steps.join(' '), true);
+  render();
+}
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('pauseBtn').textContent = paused ? '▶ Pokračovat' : '⏸ Pauza';
+  if (paused) { cancelSpeech(); speak('Pauza.'); }
+  else speak('Pokračujeme.');
+}
+
+function skip() { cancelSpeech(); timeLeft = 0; }
+
+function stopWorkout() { clearInterval(tid); cancelSpeech(); releaseWakeLock(); goHome(); }
+
+function goHome() { clearInterval(tid); cancelSpeech(); releaseWakeLock(); showScreen('list'); }
+
+function releaseWakeLock() { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
+
+function requestWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  navigator.wakeLock.request('screen').then(function(wl) {
+    wakeLock = wl;
+    document.addEventListener('visibilitychange', function() {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        navigator.wakeLock.request('screen').then(function(wl2) { wakeLock = wl2; });
+      }
+    });
+  }).catch(function() {});
+}
+
+function startWorkout() {
+  requestWakeLock();
+  idx = 0; inPrep = true; paused = false; last30 = -1;
+  timeLeft = prepDur(EX[0]);
+  document.getElementById('pauseBtn').textContent = '⏸ Pauza';
+  showScreen('timer');
+  render();
+  speak('Vítej v tréninku CORE RESTART. První cvik: ' + EX[0].name + '. ' + EX[0].steps.join(' '), true);
+  clearInterval(tid);
+  tid = setInterval(tick, 1000);
+}
+
+function toggleCard(hdr) {
+  var card = hdr.parentElement;
+  var body = card.querySelector('.card-body');
+  card.classList.toggle('open');
+  body.classList.toggle('vis');
+}
+
+showScreen('list');
+</script>
+</body>
+</html>
