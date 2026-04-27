@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CORE RESTART</title>
+<title>Cvicky</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',sans-serif;background:#0d1b2a;color:#e8f0fe;min-height:100vh;display:flex;flex-direction:column}
@@ -69,7 +69,7 @@ header p{font-size:.75rem;opacity:.6;margin-top:3px}
 </head>
 <body>
 <header>
-  <h1>🏋️ CORE RESTART – Denní trénink</h1>
+  <h1>🏋️ Cvicky – Denní trénink</h1>
   <p>Dýchání · McKenzie · Střed těla · Síla · ~32 min</p>
 </header>
 
@@ -618,7 +618,7 @@ function startWorkout() {
   document.getElementById('pauseBtn').textContent = '⏸ Pauza';
   showScreen('timer');
   render();
-  speak('Vítej v tréninku CORE RESTART. První cvik: ' + EX[0].name + '. ' + EX[0].steps.join(' '), true);
+  speak('Vítej v tréninku Cvicky. První cvik: ' + EX[0].name + '. ' + EX[0].steps.join(' '), true);
   clearInterval(tid);
   tid = setInterval(tick, 1000);
 }
