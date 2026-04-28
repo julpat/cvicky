@@ -754,14 +754,13 @@ var dragState = null;
 function attachDragHandlers(row, handle, seriesId) {
   handle.addEventListener('pointerdown', function(e) {
     if (e.button !== undefined && e.button !== 0) return;
+    if (dragState) return; // ignore secondary pointers
     e.preventDefault();
-    try { handle.setPointerCapture(e.pointerId); } catch(_) {}
 
     dragState = {
       row: row,
       seriesId: seriesId,
       pointerId: e.pointerId,
-      handle: handle,
       startY: e.clientY,
       started: false,
       timeout: null
@@ -771,17 +770,19 @@ function attachDragHandlers(row, handle, seriesId) {
       if (dragState && !dragState.started) {
         dragState.started = true;
         row.classList.add('dragging');
+        document.body.style.userSelect = 'none';
       }
     }, 180);
 
-    handle.addEventListener('pointermove', dragMove);
-    handle.addEventListener('pointerup', dragEnd);
-    handle.addEventListener('pointercancel', dragEnd);
+    document.addEventListener('pointermove', dragMove, { passive: false });
+    document.addEventListener('pointerup', dragEnd);
+    document.addEventListener('pointercancel', dragEnd);
   });
 }
 
 function dragMove(e) {
   if (!dragState) return;
+  if (e.pointerId !== dragState.pointerId) return;
   var dy = e.clientY - dragState.startY;
 
   if (!dragState.started) {
@@ -822,6 +823,7 @@ function dragMove(e) {
 
 function dragEnd(e) {
   if (!dragState) return;
+  if (e && e.pointerId !== undefined && e.pointerId !== dragState.pointerId) return;
   clearTimeout(dragState.timeout);
 
   if (dragState.started) {
@@ -851,12 +853,10 @@ function cleanupDrag() {
     dragState.row.style.transform = '';
     dragState.row.style.pointerEvents = '';
   }
-  if (dragState.handle) {
-    dragState.handle.removeEventListener('pointermove', dragMove);
-    dragState.handle.removeEventListener('pointerup', dragEnd);
-    dragState.handle.removeEventListener('pointercancel', dragEnd);
-    try { dragState.handle.releasePointerCapture(dragState.pointerId); } catch(_) {}
-  }
+  document.removeEventListener('pointermove', dragMove);
+  document.removeEventListener('pointerup', dragEnd);
+  document.removeEventListener('pointercancel', dragEnd);
+  document.body.style.userSelect = '';
   dragState = null;
 }
 
