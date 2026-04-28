@@ -71,9 +71,15 @@ header p{font-size:.75rem;opacity:.6;margin-top:3px}
 .manage-info{flex:1;min-width:0}
 .manage-row-name{font-size:.88rem;font-weight:600;color:#e8f0fe;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .manage-row-time{font-size:.72rem;color:#8aa8c8;margin-top:2px}
-.btn-row-edit,.btn-row-del{background:transparent;border:none;font-size:1rem;cursor:pointer;padding:8px 6px;color:#8aa8c8;flex-shrink:0}
+.btn-row-edit,.btn-row-del,.btn-row-speak{background:transparent;border:none;font-size:1rem;cursor:pointer;padding:8px 6px;color:#8aa8c8;flex-shrink:0}
 .btn-row-edit:hover{color:#7fc7f5}
 .btn-row-del:hover{color:#f1948a}
+.btn-row-speak.on{color:#7fc7f5}
+.btn-row-speak.off{color:#5a6e82;opacity:.6}
+.prep-sec-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:.78rem;color:#8aa8c8;flex-wrap:wrap}
+.prep-sec-row label{flex:1;min-width:0;line-height:1.35}
+.prep-sec-row input{width:80px;background:#111e2f;border:1px solid #1e3a5f;color:#e8f0fe;padding:8px 10px;border-radius:8px;font-size:.9rem;outline:none;font-family:inherit}
+.prep-sec-row input:focus{border-color:#2e86c1}
 .btn-add-ex{width:100%;background:transparent;color:#7fc7f5;border:2px dashed #2e86c1;border-radius:12px;padding:12px;font-size:.92rem;font-weight:700;cursor:pointer}
 .empty-list-msg{text-align:center;color:#8aa8c8;padding:20px;font-size:.86rem}
 
@@ -213,6 +219,7 @@ function defaultSeries() {
     id: 'ser_default',
     name: 'Cvicky – Denní trénink',
     subtitle: 'Dýchání · McKenzie · Střed těla · Síla · Uvolnění · ~32 min',
+    defaultPrepSec: 10,
     exercises: [
       { id: genId(), name:'Brániční dech vleže', sub:'Část 1 – Dýchání & mobilizace', category:'breath', sec:120,
         steps:['Leh na záda, nohy pokrč. Ruku na břicho, druhou na hrudník.','Nádech nosem – zvedá se ruka na břiše, hrudník klidný.','Výdech ústy – pomalý a delší. Tempo: čtyři doby nádech, šest dob výdech.','Opakuj plynule celé dvě minuty.'],
@@ -278,7 +285,10 @@ function defaultSeries() {
   };
 }
 
-var STATE = { data: null, currentSeriesId: null };
+var STATE = { data: null, currentSeriesId: null, activeSeries: null };
+
+function shouldSpeak(ex){ return !!ex && ex.speakDescription !== false; }
+function getPrepSec(s){ return (s && s.defaultPrepSec && s.defaultPrepSec > 0) ? s.defaultPrepSec : 10; }
 
 function loadData() {
   try {
@@ -306,7 +316,7 @@ function getSeriesById(id){
 }
 
 function addSeries(name) {
-  var s = { id: genId('ser_'), name: name, subtitle: '', exercises: [] };
+  var s = { id: genId('ser_'), name: name, subtitle: '', defaultPrepSec: 10, exercises: [] };
   STATE.data.series.push(s);
   saveData();
   return s;
@@ -344,6 +354,25 @@ function deleteExercise(seriesId, exId) {
   var s = getSeriesById(seriesId);
   if (!s) return;
   s.exercises = s.exercises.filter(function(e){ return e.id !== exId; });
+  saveData();
+}
+
+function toggleSpeak(seriesId, exId) {
+  var s = getSeriesById(seriesId);
+  if (!s) return;
+  for (var i = 0; i < s.exercises.length; i++) {
+    if (s.exercises[i].id === exId) {
+      s.exercises[i].speakDescription = !shouldSpeak(s.exercises[i]);
+      saveData();
+      return;
+    }
+  }
+}
+
+function setSeriesPrepSec(seriesId, sec) {
+  var s = getSeriesById(seriesId);
+  if (!s || !sec || sec <= 0) return;
+  s.defaultPrepSec = sec;
   saveData();
 }
 
@@ -664,6 +693,27 @@ function renderManage(seriesId) {
 
   root.appendChild(nameRow);
 
+  var prepRow = document.createElement('div');
+  prepRow.className = 'prep-sec-row';
+  var prepLbl = document.createElement('label');
+  prepLbl.textContent = 'Pauza u cviků s vypnutým hlasovým popisem (s):';
+  prepRow.appendChild(prepLbl);
+  var prepSecInput = document.createElement('input');
+  prepSecInput.type = 'number';
+  prepSecInput.min = '1';
+  prepSecInput.step = '1';
+  prepSecInput.value = getPrepSec(s);
+  prepSecInput.onblur = function(){
+    var v = parseInt(prepSecInput.value, 10);
+    if (!v || v <= 0) { prepSecInput.value = getPrepSec(s); return; }
+    setSeriesPrepSec(s.id, v);
+  };
+  prepSecInput.onkeydown = function(e){
+    if (e.key === 'Enter') { e.preventDefault(); prepSecInput.blur(); }
+  };
+  prepRow.appendChild(prepSecInput);
+  root.appendChild(prepRow);
+
   var listLabel = document.createElement('div');
   listLabel.className = 'sec-lbl';
   listLabel.textContent = 'Cviky v sérii';
@@ -718,6 +768,14 @@ function buildManageRow(ex, idx, seriesId) {
   info.appendChild(time);
 
   row.appendChild(info);
+
+  var speakBtn = document.createElement('button');
+  var speakOn = shouldSpeak(ex);
+  speakBtn.className = 'btn-row-speak ' + (speakOn ? 'on' : 'off');
+  speakBtn.innerHTML = speakOn ? '🔊' : '🔇';
+  speakBtn.title = speakOn ? 'Hlasový popis zapnut – kliknutím vypneš' : 'Hlasový popis vypnut – kliknutím zapneš';
+  speakBtn.onclick = function(){ toggleSpeak(seriesId, ex.id); renderManage(seriesId); };
+  row.appendChild(speakBtn);
 
   var editBtn = document.createElement('button');
   editBtn.className = 'btn-row-edit';
@@ -1020,7 +1078,8 @@ function openExerciseEditor(seriesId, exId) {
       sec: sec,
       steps: cleanSteps,
       tip: tipInput.value.trim(),
-      prep: prepInput.value.trim()
+      prep: prepInput.value.trim(),
+      speakDescription: ex ? (ex.speakDescription !== false) : true
     };
     if (ex) updateExercise(seriesId, ex.id, newEx);
     else addExercise(seriesId, newEx);
@@ -1056,6 +1115,7 @@ var idx = 0, timeLeft = 0, paused = false, inPrep = true, tid = null, last30 = -
 var wakeLock = null;
 
 function prepDur(ex) {
+  if (!shouldSpeak(ex)) return getPrepSec(STATE.activeSeries);
   var txt = ex.name + ' ' + (ex.steps || []).join(' ');
   return Math.max(MIN_PREP, Math.ceil(txt.length / 11) + 2);
 }
@@ -1161,7 +1221,9 @@ function advance() {
   }
   inPrep = true;
   timeLeft = prepDur(EX[idx]);
-  speak('Výborně! Příští cvik: ' + EX[idx].name + '. ' + (EX[idx].steps || []).join(' '), true);
+  var msg = 'Výborně! Příští cvik: ' + EX[idx].name + '.';
+  if (shouldSpeak(EX[idx])) msg += ' ' + (EX[idx].steps || []).join(' ');
+  speak(msg, true);
   render();
 }
 
@@ -1200,13 +1262,16 @@ function startWorkout() {
   var s = getSeriesById(STATE.currentSeriesId);
   if (!s || !s.exercises.length) return;
   EX = s.exercises;
+  STATE.activeSeries = s;
   requestWakeLock();
   idx = 0; inPrep = true; paused = false; last30 = -1;
   timeLeft = prepDur(EX[0]);
   document.getElementById('pauseBtn').textContent = '⏸ Pauza';
   showScreen('timer');
   render();
-  speak('Vítej v tréninku ' + s.name + '. První cvik: ' + EX[0].name + '. ' + (EX[0].steps || []).join(' '), true);
+  var welcome = 'Vítej v tréninku ' + s.name + '. První cvik: ' + EX[0].name + '.';
+  if (shouldSpeak(EX[0])) welcome += ' ' + (EX[0].steps || []).join(' ');
+  speak(welcome, true);
   clearInterval(tid);
   tid = setInterval(tick, 1000);
 }
