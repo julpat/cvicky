@@ -10,14 +10,35 @@ body{font-family:'Segoe UI',sans-serif;background:#0d1b2a;color:#e8f0fe;min-heig
 header{background:linear-gradient(135deg,#1a3a5c,#0d1b2a);padding:18px 20px 14px;text-align:center;border-bottom:1px solid #1e3a5f}
 header h1{font-size:1.2rem;font-weight:700}
 header p{font-size:.75rem;opacity:.6;margin-top:3px}
-#listScreen{flex:1;padding:16px;max-width:680px;width:100%;margin:0 auto}
+
+/* shared screen container */
+#seriesScreen,#listScreen,#manageScreen{flex:1;padding:16px;max-width:680px;width:100%;margin:0 auto}
+
+/* ===== seriesScreen ===== */
+.screen-title{font-size:1rem;font-weight:700;color:#b0c8e0;margin:6px 0 14px;text-align:center}
+.series-card{background:#111e2f;border-radius:14px;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:12px}
+.series-info .series-name{font-size:1.05rem;font-weight:700;color:#e8f0fe;margin-bottom:4px}
+.series-info .series-sub{font-size:.78rem;color:#8aa8c8;margin-bottom:6px;line-height:1.4}
+.series-info .series-meta{font-size:.72rem;color:#6a8aab;letter-spacing:.5px}
+.series-actions{display:flex;gap:10px}
+.btn-series-start{flex:1;background:linear-gradient(135deg,#2e86c1,#1a5276);color:white;border:none;border-radius:10px;padding:12px;font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-series-start:disabled{opacity:.4;cursor:not-allowed;background:#1e3a5f}
+.btn-series-edit{flex:1;background:#1e3a5f;color:#b0c8e0;border:none;border-radius:10px;padding:12px;font-size:.92rem;font-weight:600;cursor:pointer}
+.btn-add-series{width:100%;background:transparent;color:#7fc7f5;border:2px dashed #2e86c1;border-radius:12px;padding:14px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:6px}
+
+/* ===== listScreen ===== */
+.btn-back{background:transparent;color:#7fc7f5;border:none;padding:6px 0;font-size:.88rem;font-weight:600;cursor:pointer;margin-bottom:8px;display:inline-block}
+.list-title{font-size:1.15rem;font-weight:700;margin-bottom:4px;color:#e8f0fe}
+.list-sub{font-size:.78rem;color:#8aa8c8;margin-bottom:14px;line-height:1.4}
 .start-all{width:100%;background:linear-gradient(135deg,#2e86c1,#1a5276);color:white;border:none;border-radius:14px;padding:18px;font-size:1.05rem;font-weight:700;cursor:pointer;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(46,134,193,.4)}
+.start-all:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.empty-state{text-align:center;color:#8aa8c8;padding:30px 16px;font-size:.9rem;line-height:1.5;background:#111e2f;border-radius:12px}
 .sec-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4a9fd4;margin:18px 0 8px}
 .card{background:#111e2f;border-radius:12px;margin-bottom:8px;overflow:hidden}
 .card-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
 .num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:white;flex-shrink:0}
 .breath .num{background:#1a5276}.core .num{background:#1e6e3e}.finish .num{background:#6e3b12}
-.card-title{flex:1}
+.card-title{flex:1;min-width:0}
 .card-title strong{display:block;font-size:.88rem}
 .card-title span{font-size:.73rem;color:#8aa8c8}
 .tag{font-size:.68rem;padding:3px 9px;border-radius:8px;font-weight:600;white-space:nowrap}
@@ -33,6 +54,30 @@ header p{font-size:.75rem;opacity:.6;margin-top:3px}
 .breath .steps li::before{background:#1a5276}.core .steps li::before{background:#1e6e3e}.finish .steps li::before{background:#6e3b12}
 .tip{background:#1a2a1a;border-left:3px solid #27ae60;border-radius:0 8px 8px 0;padding:7px 10px;margin-top:8px;font-size:.78rem;color:#7fcc89;line-height:1.5}
 .yt{display:inline-flex;align-items:center;gap:5px;margin-top:10px;background:#8b0000;color:white;border:none;border-radius:7px;padding:7px 12px;font-size:.75rem;font-weight:600;text-decoration:none}
+
+/* ===== manageScreen ===== */
+.manage-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.manage-name-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
+.manage-name-input{flex:1;background:#111e2f;border:1px solid #1e3a5f;color:#e8f0fe;padding:10px 12px;font-size:1rem;font-weight:600;border-radius:10px;outline:none}
+.manage-name-input:focus{border-color:#2e86c1}
+.btn-del-series{background:#4a1010;color:#f1948a;border:none;border-radius:10px;padding:10px 14px;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-del-series:disabled{opacity:.35;cursor:not-allowed}
+.manage-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.manage-row{background:#111e2f;border-radius:10px;padding:10px 8px;display:flex;align-items:center;gap:8px;touch-action:manipulation;will-change:transform}
+.manage-row.dragging{box-shadow:0 8px 24px rgba(0,0,0,.6);transform:scale(1.02);z-index:100;opacity:.95}
+.manage-row.drop-target{outline:2px dashed #2e86c1;outline-offset:-2px}
+.drag-handle{font-size:1.1rem;color:#4a6a8a;cursor:grab;padding:8px 6px;user-select:none;touch-action:none;flex-shrink:0}
+.drag-handle:active{cursor:grabbing}
+.manage-info{flex:1;min-width:0}
+.manage-row-name{font-size:.88rem;font-weight:600;color:#e8f0fe;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.manage-row-time{font-size:.72rem;color:#8aa8c8;margin-top:2px}
+.btn-row-edit,.btn-row-del{background:transparent;border:none;font-size:1rem;cursor:pointer;padding:8px 6px;color:#8aa8c8;flex-shrink:0}
+.btn-row-edit:hover{color:#7fc7f5}
+.btn-row-del:hover{color:#f1948a}
+.btn-add-ex{width:100%;background:transparent;color:#7fc7f5;border:2px dashed #2e86c1;border-radius:12px;padding:12px;font-size:.92rem;font-weight:700;cursor:pointer}
+.empty-list-msg{text-align:center;color:#8aa8c8;padding:20px;font-size:.86rem}
+
+/* ===== timer ===== */
 #timerScreen{display:none;flex-direction:column;align-items:center;flex:1;padding:20px 16px;max-width:480px;width:100%;margin:0 auto}
 .phase{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:10px}
 .ph-active{background:#1a5276;color:#7fc7f5}.ph-prep{background:#4a2c00;color:#ffc87a}
@@ -60,296 +105,57 @@ header p{font-size:.75rem;opacity:.6;margin-top:3px}
 .next-panel{background:#111e2f;border-radius:12px;padding:10px 16px;width:100%;margin-top:8px;font-size:.82rem}
 .next-panel .lbl{color:#8aa8c8;font-size:.68rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
 .next-panel .val{font-weight:600}
+
+/* ===== done ===== */
 #doneScreen{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:30px;text-align:center}
 #doneScreen .trophy{font-size:4rem;margin-bottom:16px}
 #doneScreen h2{font-size:1.4rem;margin-bottom:8px}
 #doneScreen p{color:#8aa8c8;font-size:.9rem;margin-bottom:24px;line-height:1.6}
 .btn-home{background:#2e86c1;color:white;border:none;border-radius:50px;padding:14px 32px;font-size:1rem;font-weight:700;cursor:pointer}
+
+/* ===== editor modal ===== */
+#editorOverlay{display:none;position:fixed;inset:0;background:rgba(5,12,22,.85);z-index:1000;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.editor-modal{background:#0d1b2a;border:1px solid #1e3a5f;border-radius:14px;padding:18px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.7)}
+.editor-modal h2{font-size:1.05rem;font-weight:700;margin-bottom:6px;color:#e8f0fe}
+.editor-form{display:flex;flex-direction:column;gap:10px}
+.editor-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8aa8c8;margin-bottom:-4px;margin-top:6px}
+.editor-form input[type=text],.editor-form input[type=number],.editor-form textarea{width:100%;background:#111e2f;border:1px solid #1e3a5f;color:#e8f0fe;border-radius:8px;padding:10px;font-family:inherit;font-size:.9rem;outline:none;resize:vertical}
+.editor-form input:focus,.editor-form textarea:focus{border-color:#2e86c1}
+.cat-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.cat-opt{flex:1;background:#111e2f;border:1px solid #1e3a5f;color:#8aa8c8;padding:10px 8px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer}
+.cat-opt.active{background:#1a5276;border-color:#2e86c1;color:#e8f0fe}
+.steps-wrap{display:flex;flex-direction:column;gap:6px}
+.step-row{display:flex;gap:6px;align-items:flex-start}
+.step-n{flex-shrink:0;width:24px;height:24px;background:#1a5276;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;margin-top:8px}
+.step-row textarea{flex:1}
+.btn-step-del{flex-shrink:0;background:transparent;color:#f1948a;border:none;font-size:1.3rem;cursor:pointer;padding:4px 8px;line-height:1}
+.btn-add-step{align-self:flex-start;background:transparent;color:#7fc7f5;border:1px dashed #2e86c1;border-radius:8px;padding:6px 12px;font-size:.82rem;font-weight:600;cursor:pointer}
+.editor-btns{display:flex;gap:8px;margin-top:12px}
+.btn-cancel,.btn-save{flex:1;border:none;border-radius:10px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer}
+.btn-cancel{background:#1e3a5f;color:#8aa8c8}
+.btn-save{background:linear-gradient(135deg,#2e86c1,#1a5276);color:white}
+
+@media (max-width:520px){
+  .series-actions{flex-direction:column}
+  .manage-name-row{flex-direction:column}
+  .btn-del-series{align-self:stretch}
+}
 </style>
 </head>
 <body>
 <header>
-  <h1>🏋️ Cvicky – Denní trénink</h1>
-  <p>Dýchání · McKenzie · Střed těla · Síla · ~32 min</p>
+  <h1>🏋️ Cvicky</h1>
+  <p>Tvůj domácí trénink</p>
 </header>
 
-<div id="listScreen">
-  <button class="start-all" onclick="startWorkout()">▶ Spustit celý trénink</button>
+<!-- SERIES (home) -->
+<div id="seriesScreen"></div>
 
-  <div class="sec-lbl">🫁 Část 1 – Dýchání &amp; mobilizace</div>
+<!-- LIST (preview) -->
+<div id="listScreen"></div>
 
-  <div class="card breath">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">1</div>
-      <div class="card-title"><strong>Brániční dech vleže</strong><span>Aktivace bránice · základ všeho</span></div>
-      <div class="tag tb">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Leh na záda, nohy pokrč. Ruku na břicho, druhou na hrudník.</li>
-        <li data-n="2">Nádech nosem – zvedá se ruka na břiše, hrudník klidný.</li>
-        <li data-n="3">Výdech ústy – pomalý a delší než nádech. Tempo: 4 doby nádech / 6 dob výdech.</li>
-        <li data-n="4">Opakuj plynule celé 2 minuty.</li>
-      </ol>
-      <div class="tip">💡 Pokud se zvedá hrudník, zkus dýchat do zad – bránice se rozrůstá do všech stran.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=brani%C4%8Dn%C3%AD+d%C3%BDch%C3%A1n%C3%AD+cvi%C4%8Den%C3%AD" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card breath">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">2</div>
-      <div class="card-title"><strong>Brániční dech vsedě</strong><span>Přenos do každodenní polohy</span></div>
-      <div class="tag tb">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Sedni na pevnou židli, záda rovně, ramena dolů.</li>
-        <li data-n="2">Nádech nosem – břicho dopředu i do stran.</li>
-        <li data-n="3">Výdech ústy – pomalý a kontrolovaný, břicho se vrací.</li>
-        <li data-n="4">Opakuj 15–20 cyklů plynule.</li>
-      </ol>
-      <div class="tip">💡 Správný brániční dech vsedě vytváří přirozený korzet páteře v každodenním životě.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=brani%C4%8Dn%C3%AD+d%C3%BDch%C3%A1n%C3%AD+vsed%C4%9B" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">3</div>
-      <div class="card-title"><strong>McKenzie extenze</strong><span>Mobilizace a regenerace L5-S1</span></div>
-      <div class="tag tc">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Lehni na břicho, ruce polož pod ramena. Nohy volně nataženy, pánev uvolněna.</li>
-        <li data-n="2">Začni opřením o předloktí – mírný záklon. Pánev zůstává na podložce. Vydrž 10–15 s.</li>
-        <li data-n="3">Postupně přejdi na dlaně pro větší záklon, pokud cítíš úlevu a ne bolest.</li>
-        <li data-n="4">Pomalu se vrať dolů a opakuj. Při vystřelování do nohy okamžitě zastav!</li>
-      </ol>
-      <div class="tip">💡 Po třech měsících od výhřezu L5-S1 je extenze bezpečná. Pohyb musí být pomalý a plynulý.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=McKenzie+extenze+v%C3%BDh%C5%99ez+plot%C3%A9nky" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="sec-lbl">💪 Část 2 – Střed těla</div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">4</div>
-      <div class="card-title"><strong>Podsazení pánve</strong><span>Aktivace hlubokých břišních svalů</span></div>
-      <div class="tag tc">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Leh na záda, nohy pokrčeny, chodidla na šířku boků.</li>
-        <li data-n="2">S výdechem podsaď pánev – záda přitlač k podložce, napni břicho.</li>
-        <li data-n="3">Podrž 3–5 s, uvolni s nádechem. Pohyb malý a vědomý.</li>
-      </ol>
-      <div class="tip">💡 Zapojuješ příčný břišní sval – hlavní stabilizátor páteře.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=podsazen%C3%AD+p%C3%A1nve+cvik" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">5</div>
-      <div class="card-title"><strong>Mrtvý brouk (Dead Bug)</strong><span>Koordinace a stabilizace páteře</span></div>
-      <div class="tag tc">⏱ 3 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Leh na záda, nohy v 90°, ruce ke stropu. Záda přitlač k podložce.</li>
-        <li data-n="2">S výdechem spusť pravou ruku nad hlavu a levou nohu k zemi.</li>
-        <li data-n="3">Záda se nesmí odlepit! Vrať zpět, vystřídej strany.</li>
-      </ol>
-      <div class="tip">💡 Zmenši rozsah pohybu, pokud se záda odlepují od podložky.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=mrtv%C3%BD+brouk+dead+bug+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">6</div>
-      <div class="card-title"><strong>Pták-pes (Bird Dog)</strong><span>Hluboké svaly páteře a koordinace</span></div>
-      <div class="tag tc">⏱ 3 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Na čtyřech – ruce pod rameny, kolena pod kyčlemi. Záda rovně.</li>
-        <li data-n="2">S výdechem natáhni pravou ruku a levou nohu – přímá linie.</li>
-        <li data-n="3">Neprohýbej se, nevytáčej kyčle. Vydrž 3–5 s, vystřídej.</li>
-      </ol>
-      <div class="tip">💡 Představ si sklenici vody na zádech – nesmí se přelít.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=pt%C3%A1k+pes+bird+dog+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">7</div>
-      <div class="card-title"><strong>Most (Bridge)</strong><span>Aktivace hýždí a stabilizace pánve</span></div>
-      <div class="tag tc">⏱ 3 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Leh na záda, kolena pokrčená, chodidla na šířku boků, ruce podél těla.</li>
-        <li data-n="2">S výdechem zpevni hýždě a zvedni pánev – linie od ramen po kolena.</li>
-        <li data-n="3">Vydrž 2–3 s, pomalu spouštěj obratel po obratli.</li>
-      </ol>
-      <div class="tip">💡 Pocit by měl být hlavně v hýždích, ne v bederní páteři.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=most+bridge+cvik+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="sec-lbl">🔥 Část 3 – Silové cviky</div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">8</div>
-      <div class="card-title"><strong>Kliky na kolenou</strong><span>Horní část těla a střed</span></div>
-      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Klekni na čtyři, ruce přesuň dopředu. Tělo v přímé linii od kolen po ramena.</li>
-        <li data-n="2">Ruce na šířku ramen, zpevni břicho a hýždě.</li>
-        <li data-n="3">S nádechem ohýbej lokty a spouštěj hrudník k zemi.</li>
-        <li data-n="4">S výdechem se vytlač zpět. Opakuj po celou minutu.</li>
-      </ol>
-      <div class="tip">💡 Nezakláněj hlavu – drž ji v prodloužení páteře.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=kliky+na+kolen%C3%ADch+technika" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">9</div>
-      <div class="card-title"><strong>Side plank – levý bok</strong><span>Šikmé břišní svaly a stabilita</span></div>
-      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Lehni na levý bok, opři se o levé předloktí. Loket přímo pod ramenem.</li>
-        <li data-n="2">Nohy na sobě nebo pokrčené pro lehčí variantu.</li>
-        <li data-n="3">Zvedni boky – tělo v přímé linii od hlavy po nohy.</li>
-        <li data-n="4">Dýchej plynule bránicí a drž po celou minutu.</li>
-      </ol>
-      <div class="tip">💡 Pokud je příliš těžké, pokrč nohy. Kvalita polohy je důležitější než délka výdrže.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=side+plank+bo%C4%8Dn%C3%AD+prkno+technika" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">10</div>
-      <div class="card-title"><strong>Side plank – pravý bok</strong><span>Šikmé břišní svaly a stabilita</span></div>
-      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Lehni na pravý bok, opři se o pravé předloktí. Loket přímo pod ramenem.</li>
-        <li data-n="2">Nohy na sobě nebo pokrčené pro lehčí variantu.</li>
-        <li data-n="3">Zvedni boky – tělo v přímé linii od hlavy po nohy.</li>
-        <li data-n="4">Dýchej plynule bránicí a drž po celou minutu.</li>
-      </ol>
-      <div class="tip">💡 Stejná technika jako levý bok – věnuj oběma stranám stejnou péči.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=side+plank+bo%C4%8Dn%C3%AD+prkno+technika" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">11</div>
-      <div class="card-title"><strong>Tlačení do nohou vleže</strong><span>Hluboké břišní svaly – isometrická aktivace</span></div>
-      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Leh na záda, zvedni nohy do 90°. Kolena nad kyčlemi.</li>
-        <li data-n="2">Ruce polož na kolena.</li>
-        <li data-n="3">S výdechem tlač rukama proti kolenům a koleny proti rukám – silou, ale bez pohybu.</li>
-        <li data-n="4">Drž napětí 5 s, s nádechem uvolni. Záda přitlačena k podložce. Opakuj.</li>
-      </ol>
-      <div class="tip">💡 Isometrický cvik – pohyb nevidíš, ale svaly pracují naplno. Skvělý pro hluboké svaly břicha.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=isometric+core+press+knee+hand" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">12</div>
-      <div class="card-title"><strong>Superman</strong><span>Vzpřimovače páteře a zadní řetězec</span></div>
-      <div class="tag tc">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Lehni na břicho, ruce natáhni před sebe, nohy nataženy.</li>
-        <li data-n="2">S výdechem zvedni současně obě ruce a obě nohy co nejvýše.</li>
-        <li data-n="3">Vydrž 3–5 s, dýchej. Cítíš napětí podél celé páteře a v hýždích.</li>
-        <li data-n="4">S nádechem se pomalu sniž zpět. Krátce uvolni a opakuj.</li>
-      </ol>
-      <div class="tip">💡 Nezakláněj prudce hlavu – pohled míří k podložce. Pokud bolí záda, zvedej jen nohy nebo jen ruce zvlášť.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=superman+cvik+z%C3%A1da+vzp%C5%99imova%C4%8De" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card core">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">13</div>
-      <div class="card-title"><strong>Klasické kliky</strong><span>Horní část těla, střed a stabilizace</span></div>
-      <div class="tag tc">⏱ 1 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Opři se o dlaně a špičky nohou. Ruce na šířku ramen, tělo v přímé linii.</li>
-        <li data-n="2">Zpevni břicho, hýždě a stehna.</li>
-        <li data-n="3">S nádechem ohýbej lokty a spouštěj hrudník k zemi.</li>
-        <li data-n="4">S výdechem se vytlač zpět. Pokud klesá kvalita, přejdi na kliky na kolenou.</li>
-      </ol>
-      <div class="tip">💡 Záda se nesmí prohýbat ani hrbatět. Raději méně opakování správně.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=klasick%C3%A9+kliky+spr%C3%A1vn%C3%A1+technika" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="sec-lbl">🌿 Část 4 – Uvolnění</div>
-
-  <div class="card finish">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">14</div>
-      <div class="card-title"><strong>Kočka-Kráva</strong><span>Mobilizace celé páteře</span></div>
-      <div class="tag ts">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Na čtyřech – ruce pod rameny, kolena pod kyčlemi.</li>
-        <li data-n="2">Výdech – vyhrb záda do kulatého oblouku, hlava dolů. Kočka.</li>
-        <li data-n="3">Nádech – prohni záda dolů, hlava a ocas nahoru. Kráva.</li>
-        <li data-n="4">Střídej plynule po celé 2 minuty.</li>
-      </ol>
-      <div class="tip">💡 Pohyb vychází z celé páteře od kostrče až po krk. Synchronizuj s dechem.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=ko%C4%8Dka+kr%C3%A1va+mobilizace+p%C3%A1te%C5%99e" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-
-  <div class="card finish">
-    <div class="card-hdr" onclick="toggleCard(this)">
-      <div class="num">15</div>
-      <div class="card-title"><strong>Pozice dítěte</strong><span>Závěrečné uvolnění bederní páteře</span></div>
-      <div class="tag ts">⏱ 2 min</div><span class="chev">▼</span>
-    </div>
-    <div class="card-body">
-      <ol class="steps">
-        <li data-n="1">Z čtyřnožky sedni na paty, ruce natáhni dopředu, čelo na podložce.</li>
-        <li data-n="2">Uvolni celé tělo, ramena klesají k zemi.</li>
-        <li data-n="3">Dýchej bránicí do zad – při nádechu cítíš roztahování v bederní oblasti.</li>
-        <li data-n="4">Zůstaň a plynule dýchej po celé 2 minuty.</li>
-      </ol>
-      <div class="tip">💡 Vědomý brániční dech v pozici dítěte – propojení dechu s uvolněním páteře.</div>
-      <a class="yt" href="https://www.youtube.com/results?search_query=pozice+d%C3%ADt%C4%9Bte+protazen%C3%AD+z%C3%A1da" target="_blank">▶ YouTube ukázka</a>
-    </div>
-  </div>
-</div>
+<!-- MANAGE (editor série) -->
+<div id="manageScreen"></div>
 
 <!-- TIMER -->
 <div id="timerScreen">
@@ -390,90 +196,863 @@ header p{font-size:.75rem;opacity:.6;margin-top:3px}
   <button class="btn-home" onclick="goHome()">↩ Zpět na přehled</button>
 </div>
 
+<!-- EDITOR OVERLAY -->
+<div id="editorOverlay"></div>
+
 <script>
-var EX = [
-  { name:'Brániční dech vleže', sub:'Část 1 – Dýchání', sec:120,
-    steps:['Leh na záda, nohy pokrč. Ruku na břicho, druhou na hrudník.','Nádech nosem – zvedá se ruka na břiše, hrudník klidný.','Výdech ústy – pomalý a delší. Tempo: čtyři doby nádech, šest dob výdech.','Opakuj plynule celé dvě minuty.'],
-    tip:'Pokud se zvedá hrudník, zkus dýchat do zad. Bránice se rozrůstá do všech stran.',
-    prep:'Lehni si na záda a pokrč nohy. Polož jednu ruku na břicho a druhou na hrudník.' },
+/* =================================================
+   STORAGE LAYER
+   ================================================= */
+var STORAGE_KEY = 'cvicky_data';
+var DATA_VERSION = 1;
 
-  { name:'Brániční dech vsedě', sub:'Část 1 – Dýchání', sec:120,
-    steps:['Sedni na pevnou židli, záda rovně, ramena dolů.','Nádech nosem – břicho dopředu i do stran.','Výdech ústy – pomalý a kontrolovaný, břicho se vrací.','Opakuj patnáct až dvacet cyklů plynule.'],
-    tip:'Správný brániční dech vsedě vytváří přirozený korzet páteře v každodenním životě.',
-    prep:'Přesuň se na pevnou židli. Sedni rovně, ramena uvolni dolů.' },
+function genId(prefix){ return (prefix || 'ex_') + Math.random().toString(36).slice(2, 9); }
 
-  { name:'McKenzie extenze', sub:'Část 1 – Mobilizace L5-S1', sec:120,
-    steps:['Lehni na břicho, ruce polož pod ramena. Nohy volně nataženy, pánev uvolněna.','Začni opřením o předloktí, mírný záklon. Pánev zůstává na podložce. Vydrž deset až patnáct sekund.','Postupně přejdi na dlaně pro větší záklon, pokud cítíš úlevu a ne bolest.','Pomalu se vrať dolů a opakuj. Při vystřelování do nohy okamžitě zastav.'],
-    tip:'Po třech měsících od výhřezu L5-S1 je extenze bezpečná a prospěšná. Pohyb musí být pomalý a plynulý.',
-    prep:'Lehni si na břicho a polož ruce pod ramena.' },
+function defaultSeries() {
+  return {
+    id: 'ser_default',
+    name: 'Cvicky – Denní trénink',
+    subtitle: 'Dýchání · McKenzie · Střed těla · Síla · Uvolnění · ~32 min',
+    exercises: [
+      { id: genId(), name:'Brániční dech vleže', sub:'Část 1 – Dýchání & mobilizace', category:'breath', sec:120,
+        steps:['Leh na záda, nohy pokrč. Ruku na břicho, druhou na hrudník.','Nádech nosem – zvedá se ruka na břiše, hrudník klidný.','Výdech ústy – pomalý a delší. Tempo: čtyři doby nádech, šest dob výdech.','Opakuj plynule celé dvě minuty.'],
+        tip:'Pokud se zvedá hrudník, zkus dýchat do zad. Bránice se rozrůstá do všech stran.',
+        prep:'Lehni si na záda a pokrč nohy. Polož jednu ruku na břicho a druhou na hrudník.' },
+      { id: genId(), name:'Brániční dech vsedě', sub:'Část 1 – Dýchání & mobilizace', category:'breath', sec:120,
+        steps:['Sedni na pevnou židli, záda rovně, ramena dolů.','Nádech nosem – břicho dopředu i do stran.','Výdech ústy – pomalý a kontrolovaný, břicho se vrací.','Opakuj patnáct až dvacet cyklů plynule.'],
+        tip:'Správný brániční dech vsedě vytváří přirozený korzet páteře v každodenním životě.',
+        prep:'Přesuň se na pevnou židli. Sedni rovně, ramena uvolni dolů.' },
+      { id: genId(), name:'McKenzie extenze', sub:'Část 1 – Dýchání & mobilizace', category:'core', sec:120,
+        steps:['Lehni na břicho, ruce polož pod ramena. Nohy volně nataženy, pánev uvolněna.','Začni opřením o předloktí, mírný záklon. Pánev zůstává na podložce. Vydrž deset až patnáct sekund.','Postupně přejdi na dlaně pro větší záklon, pokud cítíš úlevu a ne bolest.','Pomalu se vrať dolů a opakuj. Při vystřelování do nohy okamžitě zastav.'],
+        tip:'Po třech měsících od výhřezu L5-S1 je extenze bezpečná a prospěšná. Pohyb musí být pomalý a plynulý.',
+        prep:'Lehni si na břicho a polož ruce pod ramena.' },
+      { id: genId(), name:'Podsazení pánve', sub:'Část 2 – Střed těla', category:'core', sec:120,
+        steps:['Leh na záda, nohy pokrčeny, chodidla na šířku boků.','S výdechem podsaď pánev – záda přitlač k podložce, napni břicho.','Podrž tři až pět sekund, uvolni s nádechem. Pohyb malý a vědomý.'],
+        tip:'Zapojuješ příčný břišní sval, hlavní stabilizátor páteře.',
+        prep:'Lehni si na záda, pokrč nohy, chodidla na šířku boků.' },
+      { id: genId(), name:'Mrtvý brouk', sub:'Část 2 – Střed těla', category:'core', sec:180,
+        steps:['Leh na záda, nohy v devadesáti stupních, ruce ke stropu. Záda přitlač k podložce.','S výdechem spusť pravou ruku nad hlavu a zároveň levou nohu k zemi.','Záda se nesmí odlepit od podložky. Vrať zpět a vystřídej strany.'],
+        tip:'Zmenši rozsah pohybu, pokud se záda odlepují.',
+        prep:'Zůstaň na zádech. Zvedni nohy do devadesáti stupňů a natáhni ruce ke stropu.' },
+      { id: genId(), name:'Pták pes', sub:'Část 2 – Střed těla', category:'core', sec:180,
+        steps:['Klekni na čtyři. Ruce pod rameny, kolena pod kyčlemi, záda rovně.','S výdechem natáhni pravou ruku dopředu a zároveň levou nohu dozadu. Přímá linie.','Nevytáčej kyčle, neprohýbej záda. Vydrž tři až pět sekund, vrať zpět a vystřídej.'],
+        tip:'Představ si sklenici vody na zádech, nesmí se přelít.',
+        prep:'Přesuň se na čtyři. Ruce pod rameny, kolena pod kyčlemi. Záda rovně.' },
+      { id: genId(), name:'Most', sub:'Část 2 – Střed těla', category:'core', sec:180,
+        steps:['Leh na záda, kolena pokrčená, chodidla na šířku boků, ruce podél těla.','S výdechem zpevni hýždě a zvedni pánev nahoru. Přímka od ramen po kolena.','Vydrž dvě až tři sekundy. Pomalu spouštěj obratel po obratli dolů.'],
+        tip:'Pocit by měl být hlavně v hýždích, ne v bederní páteři.',
+        prep:'Lehni si na záda, pokrč kolena, chodidla na šířku boků. Ruce podél těla.' },
+      { id: genId(), name:'Kliky na kolenou', sub:'Část 3 – Silové cviky', category:'core', sec:60,
+        steps:['Klekni na čtyři, ruce přesuň dopředu. Tělo v přímé linii od kolen po ramena.','Ruce na šířku ramen, zpevni břicho a hýždě.','S nádechem ohýbej lokty a spouštěj hrudník k zemi.','S výdechem se vytlač zpět. Opakuj po celou minutu.'],
+        tip:'Nezakláněj hlavu, drž ji v prodloužení páteře.',
+        prep:'Klekni na čtyři a ruce přesuň dopředu před sebe.' },
+      { id: genId(), name:'Side plank levý bok', sub:'Část 3 – Silové cviky', category:'core', sec:60,
+        steps:['Lehni na levý bok, opři se o levé předloktí. Loket přímo pod ramenem.','Nohy na sobě nebo pokrčené pro lehčí variantu.','Zvedni boky. Tělo v přímé linii od hlavy po nohy.','Dýchej plynule bránicí a drž po celou minutu.'],
+        tip:'Pokud je příliš těžké, pokrč nohy. Kvalita polohy je důležitější než délka výdrže.',
+        prep:'Lehni si na levý bok a opři se o levé předloktí.' },
+      { id: genId(), name:'Side plank pravý bok', sub:'Část 3 – Silové cviky', category:'core', sec:60,
+        steps:['Lehni na pravý bok, opři se o pravé předloktí. Loket přímo pod ramenem.','Nohy na sobě nebo pokrčené pro lehčí variantu.','Zvedni boky. Tělo v přímé linii od hlavy po nohy.','Dýchej plynule bránicí a drž po celou minutu.'],
+        tip:'Stejná technika jako levý bok. Věnuj oběma stranám stejnou péči.',
+        prep:'Otoč se na pravý bok a opři se o pravé předloktí.' },
+      { id: genId(), name:'Tlačení do nohou vleže', sub:'Část 3 – Silové cviky', category:'core', sec:60,
+        steps:['Leh na záda, zvedni nohy do devadesáti stupňů. Kolena nad kyčlemi.','Ruce polož na kolena.','S výdechem tlač rukama proti kolenům a koleny proti rukám. Silou, ale bez pohybu.','Drž napětí pět sekund, s nádechem uvolni. Záda přitlačena k podložce. Opakuj.'],
+        tip:'Isometrický cvik. Pohyb nevidíš, ale svaly pracují naplno.',
+        prep:'Lehni na záda a zvedni nohy do devadesáti stupňů.' },
+      { id: genId(), name:'Superman', sub:'Část 3 – Silové cviky', category:'core', sec:120,
+        steps:['Lehni na břicho, ruce natáhni před sebe, nohy nataženy.','S výdechem zvedni současně obě ruce a obě nohy co nejvýše.','Vydrž tři až pět sekund. Cítíš napětí podél celé páteře a v hýždích.','S nádechem se pomalu sniž zpět. Krátce uvolni a opakuj.'],
+        tip:'Nezakláněj prudce hlavu, pohled míří k podložce. Pokud bolí záda, zvedej jen nohy nebo jen ruce zvlášť.',
+        prep:'Lehni na břicho, ruce natáhni před sebe, nohy nataženy.' },
+      { id: genId(), name:'Klasické kliky', sub:'Část 3 – Silové cviky', category:'core', sec:60,
+        steps:['Opři se o dlaně a špičky nohou. Ruce na šířku ramen, tělo v přímé linii.','Zpevni břicho, hýždě a stehna.','S nádechem ohýbej lokty a spouštěj hrudník k zemi.','S výdechem se vytlač zpět. Pokud klesá kvalita, přejdi na kliky na kolenou.'],
+        tip:'Záda se nesmí prohýbat ani hrbatět. Raději méně opakování správně.',
+        prep:'Přejdi do pozice kliku. Ruce na šířku ramen, tělo jako prkno.' },
+      { id: genId(), name:'Kočka kráva', sub:'Část 4 – Uvolnění', category:'finish', sec:120,
+        steps:['Na čtyřech. Ruce pod rameny, kolena pod kyčlemi.','S výdechem vyhrb záda do kulatého oblouku, hlava dolů. To je kočka.','S nádechem prohni záda dolů, hlava a ocas nahoru. To je kráva.','Střídej plynule po celé dvě minuty.'],
+        tip:'Pohyb vychází z celé páteře od kostrče až po krk. Synchronizuj přesně s dechem.',
+        prep:'Přesuň se na čtyři na podložce. Ruce pod rameny, kolena pod kyčlemi.' },
+      { id: genId(), name:'Pozice dítěte', sub:'Část 4 – Uvolnění', category:'finish', sec:120,
+        steps:['Z čtyřnožky sedni na paty, ruce natáhni dopředu, čelo na podložce.','Uvolni celé tělo, ramena klesají k zemi.','Dýchej bránicí do zad. Při nádechu cítíš roztahování v bederní oblasti.','Zůstaň a plynule dýchej po celé dvě minuty.'],
+        tip:'Vědomý brániční dech v pozici dítěte. Skvělé propojení dechu s uvolněním páteře.',
+        prep:'Zůstaň na čtyřech. Za chvíli dosedneš na paty a natáhneš ruce dopředu.' }
+    ]
+  };
+}
 
-  { name:'Podsazení pánve', sub:'Část 2 – Střed těla', sec:120,
-    steps:['Leh na záda, nohy pokrčeny, chodidla na šířku boků.','S výdechem podsaď pánev – záda přitlač k podložce, napni břicho.','Podrž tři až pět sekund, uvolni s nádechem. Pohyb malý a vědomý.'],
-    tip:'Zapojuješ příčný břišní sval, hlavní stabilizátor páteře.',
-    prep:'Lehni si na záda, pokrč nohy, chodidla na šířku boků.' },
+var STATE = { data: null, currentSeriesId: null };
 
-  { name:'Mrtvý brouk', sub:'Část 2 – Střed těla', sec:180,
-    steps:['Leh na záda, nohy v devadesáti stupních, ruce ke stropu. Záda přitlač k podložce.','S výdechem spusť pravou ruku nad hlavu a zároveň levou nohu k zemi.','Záda se nesmí odlepit od podložky. Vrať zpět a vystřídej strany.'],
-    tip:'Zmenši rozsah pohybu, pokud se záda odlepují.',
-    prep:'Zůstaň na zádech. Zvedni nohy do devadesáti stupňů a natáhni ruce ke stropu.' },
+function loadData() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      if (parsed && parsed.series && parsed.series.length) return parsed;
+    }
+  } catch (e) { /* fall through to seed */ }
+  var seeded = { version: DATA_VERSION, series: [defaultSeries()] };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
+  return seeded;
+}
 
-  { name:'Pták pes', sub:'Část 2 – Střed těla', sec:180,
-    steps:['Klekni na čtyři. Ruce pod rameny, kolena pod kyčlemi, záda rovně.','S výdechem natáhni pravou ruku dopředu a zároveň levou nohu dozadu. Přímá linie.','Nevytáčej kyčle, neprohýbej záda. Vydrž tři až pět sekund, vrať zpět a vystřídej.'],
-    tip:'Představ si sklenici vody na zádech, nesmí se přelít.',
-    prep:'Přesuň se na čtyři. Ruce pod rameny, kolena pod kyčlemi. Záda rovně.' },
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE.data));
+}
 
-  { name:'Most', sub:'Část 2 – Střed těla', sec:180,
-    steps:['Leh na záda, kolena pokrčená, chodidla na šířku boků, ruce podél těla.','S výdechem zpevni hýždě a zvedni pánev nahoru. Přímka od ramen po kolena.','Vydrž dvě až tři sekundy. Pomalu spouštěj obratel po obratli dolů.'],
-    tip:'Pocit by měl být hlavně v hýždích, ne v bederní páteři.',
-    prep:'Lehni si na záda, pokrč kolena, chodidla na šířku boků. Ruce podél těla.' },
+function getSeries(){ return STATE.data.series; }
+function getSeriesById(id){
+  for (var i = 0; i < STATE.data.series.length; i++) {
+    if (STATE.data.series[i].id === id) return STATE.data.series[i];
+  }
+  return null;
+}
 
-  { name:'Kliky na kolenou', sub:'Část 3 – Silové cviky', sec:60,
-    steps:['Klekni na čtyři, ruce přesuň dopředu. Tělo v přímé linii od kolen po ramena.','Ruce na šířku ramen, zpevni břicho a hýždě.','S nádechem ohýbej lokty a spouštěj hrudník k zemi.','S výdechem se vytlač zpět. Opakuj po celou minutu.'],
-    tip:'Nezakláněj hlavu, drž ji v prodloužení páteře.',
-    prep:'Klekni na čtyři a ruce přesuň dopředu před sebe.' },
+function addSeries(name) {
+  var s = { id: genId('ser_'), name: name, subtitle: '', exercises: [] };
+  STATE.data.series.push(s);
+  saveData();
+  return s;
+}
+function renameSeries(id, newName) {
+  var s = getSeriesById(id);
+  if (s) { s.name = newName; saveData(); }
+}
+function deleteSeries(id) {
+  if (STATE.data.series.length <= 1) return false;
+  STATE.data.series = STATE.data.series.filter(function(s){ return s.id !== id; });
+  saveData();
+  return true;
+}
+function addExercise(seriesId, ex) {
+  var s = getSeriesById(seriesId);
+  if (!s) return;
+  ex.id = genId();
+  s.exercises.push(ex);
+  saveData();
+}
+function updateExercise(seriesId, exId, ex) {
+  var s = getSeriesById(seriesId);
+  if (!s) return;
+  for (var i = 0; i < s.exercises.length; i++) {
+    if (s.exercises[i].id === exId) {
+      ex.id = exId;
+      s.exercises[i] = ex;
+      saveData();
+      return;
+    }
+  }
+}
+function deleteExercise(seriesId, exId) {
+  var s = getSeriesById(seriesId);
+  if (!s) return;
+  s.exercises = s.exercises.filter(function(e){ return e.id !== exId; });
+  saveData();
+}
 
-  { name:'Side plank levý bok', sub:'Část 3 – Silové cviky', sec:60,
-    steps:['Lehni na levý bok, opři se o levé předloktí. Loket přímo pod ramenem.','Nohy na sobě nebo pokrčené pro lehčí variantu.','Zvedni boky. Tělo v přímé linii od hlavy po nohy.','Dýchej plynule bránicí a drž po celou minutu.'],
-    tip:'Pokud je příliš těžké, pokrč nohy. Kvalita polohy je důležitější než délka výdrže.',
-    prep:'Lehni si na levý bok a opři se o levé předloktí.' },
+STATE.data = loadData();
 
-  { name:'Side plank pravý bok', sub:'Část 3 – Silové cviky', sec:60,
-    steps:['Lehni na pravý bok, opři se o pravé předloktí. Loket přímo pod ramenem.','Nohy na sobě nebo pokrčené pro lehčí variantu.','Zvedni boky. Tělo v přímé linii od hlavy po nohy.','Dýchej plynule bránicí a drž po celou minutu.'],
-    tip:'Stejná technika jako levý bok. Věnuj oběma stranám stejnou péči.',
-    prep:'Otočse na pravý bok a opři se o pravé předloktí.' },
+/* =================================================
+   SCREEN ROUTING
+   ================================================= */
+function showScreen(name) {
+  document.getElementById('seriesScreen').style.display = name === 'series' ? 'block' : 'none';
+  document.getElementById('listScreen').style.display   = name === 'list'   ? 'block' : 'none';
+  document.getElementById('manageScreen').style.display = name === 'manage' ? 'block' : 'none';
+  document.getElementById('timerScreen').style.display  = name === 'timer'  ? 'flex'  : 'none';
+  document.getElementById('doneScreen').style.display   = name === 'done'   ? 'flex'  : 'none';
+}
 
-  { name:'Tlačení do nohou vleže', sub:'Část 3 – Silové cviky', sec:60,
-    steps:['Leh na záda, zvedni nohy do devadesáti stupňů. Kolena nad kyčlemi.','Ruce polož na kolena.','S výdechem tlač rukama proti kolenům a koleny proti rukám. Silou, ale bez pohybu.','Drž napětí pět sekund, s nádechem uvolni. Záda přitlačena k podložce. Opakuj.'],
-    tip:'Isometrický cvik. Pohyb nevidíš, ale svaly pracují naplno.',
-    prep:'Lehni na záda a zvedni nohy do devadesáti stupňů.' },
+/* =================================================
+   SERIES SCREEN
+   ================================================= */
+function renderSeriesScreen() {
+  var root = document.getElementById('seriesScreen');
+  root.innerHTML = '';
+  var title = document.createElement('div');
+  title.className = 'screen-title';
+  title.textContent = 'Vyber sérii cviků';
+  root.appendChild(title);
 
-  { name:'Superman', sub:'Část 3 – Silové cviky', sec:120,
-    steps:['Lehni na břicho, ruce natáhni před sebe, nohy nataženy.','S výdechem zvedni současně obě ruce a obě nohy co nejvýše.','Vydrž tři až pět sekund. Cítíš napětí podél celé páteře a v hýždích.','S nádechem se pomalu sniž zpět. Krátce uvolni a opakuj.'],
-    tip:'Nezakláněj prudce hlavu, pohled míří k podložce. Pokud bolí záda, zvedej jen nohy nebo jen ruce zvlášť.',
-    prep:'Lehni na břicho, ruce natáhni před sebe, nohy nataženy.' },
+  var series = getSeries();
+  for (var i = 0; i < series.length; i++) {
+    root.appendChild(buildSeriesCard(series[i]));
+  }
 
-  { name:'Klasické kliky', sub:'Část 3 – Silové cviky', sec:60,
-    steps:['Opři se o dlaně a špičky nohou. Ruce na šířku ramen, tělo v přímé linii.','Zpevni břicho, hýždě a stehna.','S nádechem ohýbej lokty a spouštěj hrudník k zemi.','S výdechem se vytlač zpět. Pokud klesá kvalita, přejdi na kliky na kolenou.'],
-    tip:'Záda se nesmí prohýbat ani hrbatět. Raději méně opakování správně.',
-    prep:'Přejdi do pozice kliku. Ruce na šířku ramen, tělo jako prkno.' },
+  var addBtn = document.createElement('button');
+  addBtn.className = 'btn-add-series';
+  addBtn.textContent = '+ Nová série';
+  addBtn.onclick = handleAddSeries;
+  root.appendChild(addBtn);
+}
 
-  { name:'Kočka kráva', sub:'Část 4 – Uvolnění', sec:120,
-    steps:['Na čtyřech. Ruce pod rameny, kolena pod kyčlemi.','S výdechem vyhrb záda do kulatého oblouku, hlava dolů. To je kočka.','S nádechem prohni záda dolů, hlava a ocas nahoru. To je kráva.','Střídej plynule po celé dvě minuty.'],
-    tip:'Pohyb vychází z celé páteře od kostrče až po krk. Synchronizuj přesně s dechem.',
-    prep:'Přesuň se na čtyři na podložce. Ruce pod rameny, kolena pod kyčlemi.' },
+function buildSeriesCard(s) {
+  var card = document.createElement('div');
+  card.className = 'series-card';
 
-  { name:'Pozice dítěte', sub:'Část 4 – Uvolnění', sec:120,
-    steps:['Z čtyřnožky sedni na paty, ruce natáhni dopředu, čelo na podložce.','Uvolni celé tělo, ramena klesají k zemi.','Dýchej bránicí do zad. Při nádechu cítíš roztahování v bederní oblasti.','Zůstaň a plynule dýchej po celé dvě minuty.'],
-    tip:'Vědomý brániční dech v pozici dítěte. Skvělé propojení dechu s uvolněním páteře.',
-    prep:'Zůstaň na čtyřech. Za chvíli dosedneš na paty a natáhneš ruce dopředu.' }
-];
+  var info = document.createElement('div');
+  info.className = 'series-info';
 
+  var name = document.createElement('div');
+  name.className = 'series-name';
+  name.textContent = s.name;
+  info.appendChild(name);
+
+  if (s.subtitle) {
+    var sub = document.createElement('div');
+    sub.className = 'series-sub';
+    sub.textContent = s.subtitle;
+    info.appendChild(sub);
+  }
+
+  var totalSec = 0;
+  for (var i = 0; i < s.exercises.length; i++) totalSec += (s.exercises[i].sec || 0);
+  var minutes = Math.round(totalSec / 60);
+
+  var meta = document.createElement('div');
+  meta.className = 'series-meta';
+  meta.textContent = s.exercises.length + ' ' + plural(s.exercises.length, 'cvik','cviky','cviků') +
+                     (totalSec > 0 ? ' · ~' + minutes + ' min' : '');
+  info.appendChild(meta);
+
+  card.appendChild(info);
+
+  var actions = document.createElement('div');
+  actions.className = 'series-actions';
+
+  var startBtn = document.createElement('button');
+  startBtn.className = 'btn-series-start';
+  startBtn.innerHTML = '▶ Spustit';
+  startBtn.disabled = s.exercises.length === 0;
+  startBtn.onclick = function(){ openListScreen(s.id); };
+  actions.appendChild(startBtn);
+
+  var editBtn = document.createElement('button');
+  editBtn.className = 'btn-series-edit';
+  editBtn.innerHTML = '✎ Upravit';
+  editBtn.onclick = function(){ openManageScreen(s.id); };
+  actions.appendChild(editBtn);
+
+  card.appendChild(actions);
+  return card;
+}
+
+function plural(n, a, b, c) {
+  if (n === 1) return a;
+  if (n >= 2 && n <= 4) return b;
+  return c;
+}
+
+function handleAddSeries() {
+  var name = prompt('Název nové série:');
+  if (name === null) return;
+  name = name.trim();
+  if (!name) return;
+  var s = addSeries(name);
+  openManageScreen(s.id);
+}
+
+/* =================================================
+   LIST SCREEN (preview)
+   ================================================= */
+function openListScreen(seriesId) {
+  STATE.currentSeriesId = seriesId;
+  renderListScreen(seriesId);
+  showScreen('list');
+}
+
+function renderListScreen(seriesId) {
+  var s = getSeriesById(seriesId);
+  var root = document.getElementById('listScreen');
+  root.innerHTML = '';
+
+  var back = document.createElement('button');
+  back.className = 'btn-back';
+  back.textContent = '↩ Zpět na výběr série';
+  back.onclick = function(){ showScreen('series'); };
+  root.appendChild(back);
+
+  var title = document.createElement('h2');
+  title.className = 'list-title';
+  title.textContent = s.name;
+  root.appendChild(title);
+
+  if (s.subtitle) {
+    var sub = document.createElement('p');
+    sub.className = 'list-sub';
+    sub.textContent = s.subtitle;
+    root.appendChild(sub);
+  }
+
+  var startBtn = document.createElement('button');
+  startBtn.className = 'start-all';
+  startBtn.innerHTML = '▶ Spustit celý trénink';
+  startBtn.disabled = s.exercises.length === 0;
+  startBtn.onclick = function(){ startWorkout(); };
+  root.appendChild(startBtn);
+
+  if (s.exercises.length === 0) {
+    var empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'V této sérii zatím není žádný cvik. Klikni „Zpět" → „Upravit" a přidej cviky.';
+    root.appendChild(empty);
+    return;
+  }
+
+  var lastSub = '';
+  for (var i = 0; i < s.exercises.length; i++) {
+    var ex = s.exercises[i];
+    if (ex.sub && ex.sub !== lastSub) {
+      var lbl = document.createElement('div');
+      lbl.className = 'sec-lbl';
+      lbl.textContent = sectionEmoji(ex.category) + ' ' + ex.sub;
+      root.appendChild(lbl);
+      lastSub = ex.sub;
+    }
+    root.appendChild(buildExerciseCard(ex, i));
+  }
+}
+
+function sectionEmoji(cat) {
+  if (cat === 'breath') return '🫁';
+  if (cat === 'finish') return '🌿';
+  return '💪';
+}
+
+function buildExerciseCard(ex, idx) {
+  var card = document.createElement('div');
+  card.className = 'card ' + (ex.category || 'core');
+
+  var hdr = document.createElement('div');
+  hdr.className = 'card-hdr';
+  hdr.onclick = function(){ toggleCard(hdr); };
+
+  var num = document.createElement('div');
+  num.className = 'num';
+  num.textContent = (idx + 1);
+  hdr.appendChild(num);
+
+  var title = document.createElement('div');
+  title.className = 'card-title';
+  var strong = document.createElement('strong');
+  strong.textContent = ex.name;
+  title.appendChild(strong);
+  if (ex.sub) {
+    var span = document.createElement('span');
+    span.textContent = ex.sub;
+    title.appendChild(span);
+  }
+  hdr.appendChild(title);
+
+  var tag = document.createElement('div');
+  tag.className = 'tag ' + tagClassFor(ex.category);
+  tag.textContent = '⏱ ' + formatTime(ex.sec);
+  hdr.appendChild(tag);
+
+  var chev = document.createElement('span');
+  chev.className = 'chev';
+  chev.textContent = '▼';
+  hdr.appendChild(chev);
+
+  card.appendChild(hdr);
+
+  var body = document.createElement('div');
+  body.className = 'card-body';
+
+  if (ex.steps && ex.steps.length) {
+    var ol = document.createElement('ol');
+    ol.className = 'steps';
+    for (var i = 0; i < ex.steps.length; i++) {
+      var li = document.createElement('li');
+      li.setAttribute('data-n', i + 1);
+      li.textContent = ex.steps[i];
+      ol.appendChild(li);
+    }
+    body.appendChild(ol);
+  }
+
+  if (ex.tip) {
+    var tip = document.createElement('div');
+    tip.className = 'tip';
+    tip.textContent = '💡 ' + ex.tip;
+    body.appendChild(tip);
+  }
+
+  var yt = document.createElement('a');
+  yt.className = 'yt';
+  yt.href = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.name);
+  yt.target = '_blank';
+  yt.rel = 'noopener';
+  yt.textContent = '▶ YouTube ukázka';
+  body.appendChild(yt);
+
+  card.appendChild(body);
+  return card;
+}
+
+function tagClassFor(cat) {
+  if (cat === 'breath') return 'tb';
+  if (cat === 'finish') return 'ts';
+  return 'tc';
+}
+
+function formatTime(sec) {
+  if (!sec) return '0 s';
+  if (sec >= 60 && sec % 60 === 0) return (sec / 60) + ' min';
+  if (sec >= 60) return Math.floor(sec / 60) + ' min ' + (sec % 60) + ' s';
+  return sec + ' s';
+}
+
+function toggleCard(hdr) {
+  var card = hdr.parentElement;
+  var body = card.querySelector('.card-body');
+  card.classList.toggle('open');
+  body.classList.toggle('vis');
+}
+
+/* =================================================
+   MANAGE SCREEN (editor série)
+   ================================================= */
+function openManageScreen(seriesId) {
+  STATE.currentSeriesId = seriesId;
+  renderManage(seriesId);
+  showScreen('manage');
+}
+
+function renderManage(seriesId) {
+  var s = getSeriesById(seriesId);
+  var root = document.getElementById('manageScreen');
+  root.innerHTML = '';
+
+  var back = document.createElement('button');
+  back.className = 'btn-back';
+  back.textContent = '↩ Zpět na výběr série';
+  back.onclick = function(){ showScreen('series'); renderSeriesScreen(); };
+  root.appendChild(back);
+
+  var nameRow = document.createElement('div');
+  nameRow.className = 'manage-name-row';
+
+  var nameInput = document.createElement('input');
+  nameInput.className = 'manage-name-input';
+  nameInput.value = s.name;
+  nameInput.placeholder = 'Název série';
+  nameInput.onblur = function(){
+    var v = nameInput.value.trim();
+    if (v && v !== s.name) renameSeries(s.id, v);
+    else nameInput.value = s.name;
+  };
+  nameInput.onkeydown = function(e){
+    if (e.key === 'Enter') { e.preventDefault(); nameInput.blur(); }
+  };
+  nameRow.appendChild(nameInput);
+
+  var delBtn = document.createElement('button');
+  delBtn.className = 'btn-del-series';
+  delBtn.textContent = '🗑 Smazat sérii';
+  delBtn.disabled = getSeries().length <= 1;
+  if (delBtn.disabled) delBtn.title = 'Poslední sérii nelze smazat';
+  delBtn.onclick = function(){
+    if (!confirm('Opravdu smazat sérii „' + s.name + '"? Tato akce je nevratná.')) return;
+    if (deleteSeries(s.id)) {
+      showScreen('series');
+      renderSeriesScreen();
+    }
+  };
+  nameRow.appendChild(delBtn);
+
+  root.appendChild(nameRow);
+
+  var listLabel = document.createElement('div');
+  listLabel.className = 'sec-lbl';
+  listLabel.textContent = 'Cviky v sérii';
+  root.appendChild(listLabel);
+
+  var list = document.createElement('div');
+  list.className = 'manage-list';
+  list.id = 'manageList';
+
+  if (s.exercises.length === 0) {
+    var msg = document.createElement('div');
+    msg.className = 'empty-list-msg';
+    msg.textContent = 'Žádný cvik. Přidej první níže.';
+    list.appendChild(msg);
+  } else {
+    for (var i = 0; i < s.exercises.length; i++) {
+      list.appendChild(buildManageRow(s.exercises[i], i, s.id));
+    }
+  }
+  root.appendChild(list);
+
+  var addBtn = document.createElement('button');
+  addBtn.className = 'btn-add-ex';
+  addBtn.textContent = '+ Nový cvik';
+  addBtn.onclick = function(){ openExerciseEditor(s.id, null); };
+  root.appendChild(addBtn);
+}
+
+function buildManageRow(ex, idx, seriesId) {
+  var row = document.createElement('div');
+  row.className = 'manage-row';
+  row.setAttribute('data-id', ex.id);
+
+  var handle = document.createElement('div');
+  handle.className = 'drag-handle';
+  handle.textContent = '☰';
+  handle.title = 'Podržet a táhnout pro změnu pořadí';
+  row.appendChild(handle);
+  attachDragHandlers(row, handle, seriesId);
+
+  var info = document.createElement('div');
+  info.className = 'manage-info';
+
+  var n = document.createElement('div');
+  n.className = 'manage-row-name';
+  n.textContent = (idx + 1) + '. ' + ex.name;
+  info.appendChild(n);
+
+  var time = document.createElement('div');
+  time.className = 'manage-row-time';
+  time.textContent = formatTime(ex.sec) + ' · ' + categoryLabel(ex.category);
+  info.appendChild(time);
+
+  row.appendChild(info);
+
+  var editBtn = document.createElement('button');
+  editBtn.className = 'btn-row-edit';
+  editBtn.innerHTML = '✎';
+  editBtn.title = 'Upravit cvik';
+  editBtn.onclick = function(){ openExerciseEditor(seriesId, ex.id); };
+  row.appendChild(editBtn);
+
+  var delBtn = document.createElement('button');
+  delBtn.className = 'btn-row-del';
+  delBtn.innerHTML = '🗑';
+  delBtn.title = 'Smazat cvik';
+  delBtn.onclick = function(){
+    if (!confirm('Smazat cvik „' + ex.name + '"?')) return;
+    deleteExercise(seriesId, ex.id);
+    renderManage(seriesId);
+  };
+  row.appendChild(delBtn);
+
+  return row;
+}
+
+function categoryLabel(cat) {
+  if (cat === 'breath') return '🫁 Dýchání';
+  if (cat === 'finish') return '🌿 Uvolnění';
+  return '💪 Střed';
+}
+
+/* =================================================
+   DRAG & DROP (Pointer Events, mouse + touch)
+   ================================================= */
+var dragState = null;
+
+function attachDragHandlers(row, handle, seriesId) {
+  handle.addEventListener('pointerdown', function(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault();
+    try { handle.setPointerCapture(e.pointerId); } catch(_) {}
+
+    dragState = {
+      row: row,
+      seriesId: seriesId,
+      pointerId: e.pointerId,
+      handle: handle,
+      startY: e.clientY,
+      started: false,
+      timeout: null
+    };
+
+    dragState.timeout = setTimeout(function(){
+      if (dragState && !dragState.started) {
+        dragState.started = true;
+        row.classList.add('dragging');
+      }
+    }, 180);
+
+    handle.addEventListener('pointermove', dragMove);
+    handle.addEventListener('pointerup', dragEnd);
+    handle.addEventListener('pointercancel', dragEnd);
+  });
+}
+
+function dragMove(e) {
+  if (!dragState) return;
+  var dy = e.clientY - dragState.startY;
+
+  if (!dragState.started) {
+    // Pre-grab: cancel if user moved too far before long-press fired (likely scroll/click)
+    if (Math.abs(dy) > 10) {
+      clearTimeout(dragState.timeout);
+      cleanupDrag();
+    }
+    return;
+  }
+
+  e.preventDefault();
+  dragState.row.style.transform = 'translateY(' + dy + 'px)';
+
+  // Find row under pointer (ignore the dragged row itself)
+  dragState.row.style.pointerEvents = 'none';
+  var elem = document.elementFromPoint(e.clientX, e.clientY);
+  dragState.row.style.pointerEvents = '';
+
+  var target = elem ? elem.closest('.manage-row') : null;
+  if (target && target !== dragState.row) {
+    var list = document.getElementById('manageList');
+    var rows = Array.prototype.slice.call(list.children);
+    var fromIdx = rows.indexOf(dragState.row);
+    var toIdx = rows.indexOf(target);
+    if (fromIdx >= 0 && toIdx >= 0 && fromIdx !== toIdx) {
+      if (toIdx < fromIdx) {
+        list.insertBefore(dragState.row, target);
+      } else {
+        list.insertBefore(dragState.row, target.nextSibling);
+      }
+      // After DOM swap, reset baseline so the row visually stays under the pointer
+      dragState.startY = e.clientY;
+      dragState.row.style.transform = 'translateY(0px)';
+    }
+  }
+}
+
+function dragEnd(e) {
+  if (!dragState) return;
+  clearTimeout(dragState.timeout);
+
+  if (dragState.started) {
+    var list = document.getElementById('manageList');
+    var newIds = Array.prototype.slice.call(list.children)
+      .filter(function(c){ return c.classList.contains('manage-row'); })
+      .map(function(r){ return r.getAttribute('data-id'); });
+    var s = getSeriesById(dragState.seriesId);
+    if (s) {
+      s.exercises.sort(function(a, b){
+        return newIds.indexOf(a.id) - newIds.indexOf(b.id);
+      });
+      saveData();
+      var sid = dragState.seriesId;
+      cleanupDrag();
+      renderManage(sid);
+      return;
+    }
+  }
+  cleanupDrag();
+}
+
+function cleanupDrag() {
+  if (!dragState) return;
+  if (dragState.row) {
+    dragState.row.classList.remove('dragging');
+    dragState.row.style.transform = '';
+    dragState.row.style.pointerEvents = '';
+  }
+  if (dragState.handle) {
+    dragState.handle.removeEventListener('pointermove', dragMove);
+    dragState.handle.removeEventListener('pointerup', dragEnd);
+    dragState.handle.removeEventListener('pointercancel', dragEnd);
+    try { dragState.handle.releasePointerCapture(dragState.pointerId); } catch(_) {}
+  }
+  dragState = null;
+}
+
+/* =================================================
+   EXERCISE EDITOR (modal)
+   ================================================= */
+function openExerciseEditor(seriesId, exId) {
+  var s = getSeriesById(seriesId);
+  var ex = null;
+  if (exId) {
+    for (var i = 0; i < s.exercises.length; i++) {
+      if (s.exercises[i].id === exId) { ex = s.exercises[i]; break; }
+    }
+  }
+
+  var overlay = document.getElementById('editorOverlay');
+  overlay.innerHTML = '';
+  overlay.style.display = 'flex';
+
+  var modal = document.createElement('div');
+  modal.className = 'editor-modal';
+
+  var title = document.createElement('h2');
+  title.textContent = ex ? 'Upravit cvik' : 'Nový cvik';
+  modal.appendChild(title);
+
+  var form = document.createElement('form');
+  form.className = 'editor-form';
+  form.onsubmit = function(e){ e.preventDefault(); return false; };
+
+  // Name
+  form.appendChild(buildLabel('Název *'));
+  var nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.value = ex ? ex.name : '';
+  form.appendChild(nameInput);
+
+  // Sub
+  form.appendChild(buildLabel('Popisek sekce (např. „Část 2 – Střed těla")'));
+  var subInput = document.createElement('input');
+  subInput.type = 'text';
+  subInput.value = ex ? (ex.sub || '') : '';
+  form.appendChild(subInput);
+
+  // Category
+  form.appendChild(buildLabel('Kategorie (barva)'));
+  var catWrap = document.createElement('div');
+  catWrap.className = 'cat-wrap';
+  var cats = [['breath','🫁 Dýchání'],['core','💪 Střed'],['finish','🌿 Uvolnění']];
+  var selectedCat = ex ? (ex.category || 'core') : 'core';
+  cats.forEach(function(pair){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cat-opt' + (selectedCat === pair[0] ? ' active' : '');
+    btn.textContent = pair[1];
+    btn.onclick = function(){
+      selectedCat = pair[0];
+      Array.prototype.slice.call(catWrap.children).forEach(function(c){ c.classList.remove('active'); });
+      btn.classList.add('active');
+    };
+    catWrap.appendChild(btn);
+  });
+  form.appendChild(catWrap);
+
+  // Sec
+  form.appendChild(buildLabel('Délka cviku (sekundy) *'));
+  var secInput = document.createElement('input');
+  secInput.type = 'number';
+  secInput.min = '1';
+  secInput.step = '1';
+  secInput.value = ex ? ex.sec : 60;
+  form.appendChild(secInput);
+
+  // Steps
+  form.appendChild(buildLabel('Kroky / instrukce'));
+  var stepsWrap = document.createElement('div');
+  stepsWrap.className = 'steps-wrap';
+  var steps = ex && ex.steps && ex.steps.length ? ex.steps.slice() : [''];
+
+  function rerenderSteps() {
+    stepsWrap.innerHTML = '';
+    steps.forEach(function(text, idx){
+      var row = document.createElement('div');
+      row.className = 'step-row';
+      var n = document.createElement('span');
+      n.className = 'step-n';
+      n.textContent = (idx + 1);
+      row.appendChild(n);
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.rows = 2;
+      ta.placeholder = 'Krok ' + (idx + 1);
+      ta.oninput = function(){ steps[idx] = ta.value; };
+      row.appendChild(ta);
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'btn-step-del';
+      del.innerHTML = '×';
+      del.title = 'Odstranit krok';
+      del.onclick = function(){
+        steps.splice(idx, 1);
+        if (steps.length === 0) steps.push('');
+        rerenderSteps();
+      };
+      row.appendChild(del);
+      stepsWrap.appendChild(row);
+    });
+  }
+  rerenderSteps();
+  form.appendChild(stepsWrap);
+
+  var addStep = document.createElement('button');
+  addStep.type = 'button';
+  addStep.className = 'btn-add-step';
+  addStep.textContent = '+ Přidat krok';
+  addStep.onclick = function(){ steps.push(''); rerenderSteps(); };
+  form.appendChild(addStep);
+
+  // Tip
+  form.appendChild(buildLabel('Tip (doporučení)'));
+  var tipInput = document.createElement('textarea');
+  tipInput.rows = 2;
+  tipInput.value = ex ? (ex.tip || '') : '';
+  form.appendChild(tipInput);
+
+  // Prep
+  form.appendChild(buildLabel('Příprava (čte se hlasem před cvikem)'));
+  var prepInput = document.createElement('textarea');
+  prepInput.rows = 2;
+  prepInput.value = ex ? (ex.prep || '') : '';
+  form.appendChild(prepInput);
+
+  // Buttons
+  var btnRow = document.createElement('div');
+  btnRow.className = 'editor-btns';
+
+  var cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'btn-cancel';
+  cancelBtn.textContent = 'Zrušit';
+  cancelBtn.onclick = closeEditor;
+  btnRow.appendChild(cancelBtn);
+
+  var saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'btn-save';
+  saveBtn.textContent = 'Uložit';
+  saveBtn.onclick = function() {
+    nameInput.style.borderColor = '';
+    secInput.style.borderColor = '';
+    var name = nameInput.value.trim();
+    var sec = parseInt(secInput.value, 10);
+    if (!name) { nameInput.focus(); nameInput.style.borderColor = '#cc4444'; return; }
+    if (!sec || sec <= 0) { secInput.focus(); secInput.style.borderColor = '#cc4444'; return; }
+    var cleanSteps = steps.map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
+    var newEx = {
+      id: ex ? ex.id : '',
+      name: name,
+      sub: subInput.value.trim(),
+      category: selectedCat,
+      sec: sec,
+      steps: cleanSteps,
+      tip: tipInput.value.trim(),
+      prep: prepInput.value.trim()
+    };
+    if (ex) updateExercise(seriesId, ex.id, newEx);
+    else addExercise(seriesId, newEx);
+    closeEditor();
+    renderManage(seriesId);
+  };
+  btnRow.appendChild(saveBtn);
+
+  form.appendChild(btnRow);
+  modal.appendChild(form);
+  overlay.appendChild(modal);
+}
+
+function buildLabel(t) {
+  var l = document.createElement('div');
+  l.className = 'editor-label';
+  l.textContent = t;
+  return l;
+}
+
+function closeEditor() {
+  var overlay = document.getElementById('editorOverlay');
+  overlay.style.display = 'none';
+  overlay.innerHTML = '';
+}
+
+/* =================================================
+   TIMER (existing logic, populates EX from active series)
+   ================================================= */
+var EX = [];
 var MIN_PREP = 15;
 var idx = 0, timeLeft = 0, paused = false, inPrep = true, tid = null, last30 = -1;
 var wakeLock = null;
 
 function prepDur(ex) {
-  var txt = ex.name + ' ' + ex.steps.join(' ');
+  var txt = ex.name + ' ' + (ex.steps || []).join(' ');
   return Math.max(MIN_PREP, Math.ceil(txt.length / 11) + 2);
 }
 
@@ -485,12 +1064,6 @@ function speak(txt, cancel) {
   window.speechSynthesis.speak(u);
 }
 function cancelSpeech() { if (window.speechSynthesis) window.speechSynthesis.cancel(); }
-
-function showScreen(s) {
-  document.getElementById('listScreen').style.display  = s === 'list'  ? 'block' : 'none';
-  document.getElementById('timerScreen').style.display = s === 'timer' ? 'flex'  : 'none';
-  document.getElementById('doneScreen').style.display  = s === 'done'  ? 'flex'  : 'none';
-}
 
 function buildDots() {
   var row = document.getElementById('dotsRow');
@@ -509,22 +1082,26 @@ function renderInstr() {
   div.innerHTML = '';
   if (inPrep) {
     lbl.textContent = 'Připrav polohu';
-    div.textContent = ex.prep;
+    div.textContent = ex.prep || '';
   } else {
     lbl.textContent = 'Instrukce';
-    var ol = document.createElement('ol');
-    ol.className = 'info-steps';
-    for (var i = 0; i < ex.steps.length; i++) {
-      var li = document.createElement('li');
-      li.setAttribute('data-n', i + 1);
-      li.textContent = ex.steps[i];
-      ol.appendChild(li);
+    if (ex.steps && ex.steps.length) {
+      var ol = document.createElement('ol');
+      ol.className = 'info-steps';
+      for (var i = 0; i < ex.steps.length; i++) {
+        var li = document.createElement('li');
+        li.setAttribute('data-n', i + 1);
+        li.textContent = ex.steps[i];
+        ol.appendChild(li);
+      }
+      div.appendChild(ol);
     }
-    var tip = document.createElement('div');
-    tip.className = 'info-tip';
-    tip.textContent = '💡 ' + ex.tip;
-    div.appendChild(ol);
-    div.appendChild(tip);
+    if (ex.tip) {
+      var tip = document.createElement('div');
+      tip.className = 'info-tip';
+      tip.textContent = '💡 ' + ex.tip;
+      div.appendChild(tip);
+    }
   }
 }
 
@@ -534,7 +1111,7 @@ function render() {
   var ratio = timeLeft / dur;
   var badge = document.getElementById('phaseBadge');
   badge.className = 'phase ' + (inPrep ? 'ph-prep' : 'ph-active');
-  badge.textContent = inPrep ? 'PAUZA' : ex.sub.toUpperCase();
+  badge.textContent = inPrep ? 'PAUZA' : (ex.sub ? ex.sub.toUpperCase() : 'CVIK');
   document.getElementById('tName').textContent = inPrep ? (idx === 0 ? 'Připrav se!' : 'Příprava') : ex.name;
   document.getElementById('tSub').textContent  = inPrep ? 'Cvik ' + (idx+1) + ': ' + ex.name : 'Cvik ' + (idx+1) + ' / ' + EX.length;
   document.getElementById('ringNum').textContent = timeLeft;
@@ -580,7 +1157,7 @@ function advance() {
   }
   inPrep = true;
   timeLeft = prepDur(EX[idx]);
-  speak('Výborně! Příští cvik: ' + EX[idx].name + '. ' + EX[idx].steps.join(' '), true);
+  speak('Výborně! Příští cvik: ' + EX[idx].name + '. ' + (EX[idx].steps || []).join(' '), true);
   render();
 }
 
@@ -595,9 +1172,13 @@ function skip() { cancelSpeech(); timeLeft = 0; }
 
 function stopWorkout() { clearInterval(tid); cancelSpeech(); releaseWakeLock(); goHome(); }
 
-function goHome() { clearInterval(tid); cancelSpeech(); releaseWakeLock(); showScreen('list'); }
+function goHome() {
+  clearInterval(tid); cancelSpeech(); releaseWakeLock();
+  showScreen('series');
+  renderSeriesScreen();
+}
 
-function releaseWakeLock() { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
+function releaseWakeLock() { if (wakeLock) { try { wakeLock.release(); } catch(_) {} wakeLock = null; } }
 
 function requestWakeLock() {
   if (!('wakeLock' in navigator)) return;
@@ -605,32 +1186,32 @@ function requestWakeLock() {
     wakeLock = wl;
     document.addEventListener('visibilitychange', function() {
       if (wakeLock !== null && document.visibilityState === 'visible') {
-        navigator.wakeLock.request('screen').then(function(wl2) { wakeLock = wl2; });
+        navigator.wakeLock.request('screen').then(function(wl2) { wakeLock = wl2; }).catch(function(){});
       }
     });
   }).catch(function() {});
 }
 
 function startWorkout() {
+  var s = getSeriesById(STATE.currentSeriesId);
+  if (!s || !s.exercises.length) return;
+  EX = s.exercises;
   requestWakeLock();
   idx = 0; inPrep = true; paused = false; last30 = -1;
   timeLeft = prepDur(EX[0]);
   document.getElementById('pauseBtn').textContent = '⏸ Pauza';
   showScreen('timer');
   render();
-  speak('Vítej v tréninku Cvicky. První cvik: ' + EX[0].name + '. ' + EX[0].steps.join(' '), true);
+  speak('Vítej v tréninku ' + s.name + '. První cvik: ' + EX[0].name + '. ' + (EX[0].steps || []).join(' '), true);
   clearInterval(tid);
   tid = setInterval(tick, 1000);
 }
 
-function toggleCard(hdr) {
-  var card = hdr.parentElement;
-  var body = card.querySelector('.card-body');
-  card.classList.toggle('open');
-  body.classList.toggle('vis');
-}
-
-showScreen('list');
+/* =================================================
+   BOOT
+   ================================================= */
+renderSeriesScreen();
+showScreen('series');
 </script>
 </body>
 </html>
