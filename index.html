@@ -441,10 +441,14 @@ function plural(n, a, b, c) {
 }
 
 function handleAddSeries() {
-  var name = prompt('Název nové série:');
-  if (name === null) return;
-  name = name.trim();
-  if (!name) return;
+  var existing = STATE.data.series.length;
+  var baseName = 'Nová série';
+  var name = baseName;
+  var n = 2;
+  while (STATE.data.series.some(function(s){ return s.name === name; })) {
+    name = baseName + ' ' + n;
+    n++;
+  }
   var s = addSeries(name);
   openManageScreen(s.id);
 }
