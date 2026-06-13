@@ -218,7 +218,7 @@ function defaultSeries() {
   return {
     id: 'ser_default',
     name: 'Cvicky – Denní trénink',
-    subtitle: 'Dýchání · McKenzie · Střed těla · Síla · Uvolnění · ~32 min',
+    subtitle: 'Dýchání · McKenzie · Střed těla · Síla · Uvolnění',
     defaultPrepSec: 10,
     exercises: [
       { id: genId(), name:'Brániční dech vleže', sub:'Část 1 – Dýchání & mobilizace', category:'breath', sec:120,
@@ -289,6 +289,24 @@ var STATE = { data: null, currentSeriesId: null, activeSeries: null };
 
 function shouldSpeak(ex){ return !!ex && ex.speakDescription !== false; }
 function getPrepSec(s){ return (s && s.defaultPrepSec && s.defaultPrepSec > 0) ? s.defaultPrepSec : 10; }
+
+// Skutečná délka tréninku = příprava (pauza) + cvik pro každý cvik v sérii.
+// prepDur je díky hoistingu dostupné i tady.
+function seriesTotalSec(s) {
+  if (!s || !s.exercises) return 0;
+  var total = 0;
+  for (var i = 0; i < s.exercises.length; i++) {
+    total += prepDur(s.exercises[i], s) + (s.exercises[i].sec || 0);
+  }
+  return total;
+}
+
+// Odřízne zastaralý statický údaj o délce (např. „· ~32 min") z konce podtitulku,
+// aby se nezobrazoval vedle dynamicky přepočítaného času.
+function stripDuration(text) {
+  if (!text) return '';
+  return text.replace(/\s*[·•|,–-]?\s*~?\s*\d+\s*min\.?\s*$/i, '').trim();
+}
 
 function loadData() {
   try {
@@ -424,15 +442,15 @@ function buildSeriesCard(s) {
   name.textContent = s.name;
   info.appendChild(name);
 
-  if (s.subtitle) {
+  var subText = stripDuration(s.subtitle);
+  if (subText) {
     var sub = document.createElement('div');
     sub.className = 'series-sub';
-    sub.textContent = s.subtitle;
+    sub.textContent = subText;
     info.appendChild(sub);
   }
 
-  var totalSec = 0;
-  for (var i = 0; i < s.exercises.length; i++) totalSec += (s.exercises[i].sec || 0);
+  var totalSec = seriesTotalSec(s);
   var minutes = Math.round(totalSec / 60);
 
   var meta = document.createElement('div');
@@ -507,10 +525,11 @@ function renderListScreen(seriesId) {
   title.textContent = s.name;
   root.appendChild(title);
 
-  if (s.subtitle) {
+  var subText = stripDuration(s.subtitle);
+  if (subText) {
     var sub = document.createElement('p');
     sub.className = 'list-sub';
-    sub.textContent = s.subtitle;
+    sub.textContent = subText;
     root.appendChild(sub);
   }
 
@@ -1114,8 +1133,8 @@ var MIN_PREP = 15;
 var idx = 0, timeLeft = 0, paused = false, inPrep = true, tid = null, last30 = -1;
 var wakeLock = null;
 
-function prepDur(ex) {
-  if (!shouldSpeak(ex)) return getPrepSec(STATE.activeSeries);
+function prepDur(ex, series) {
+  if (!shouldSpeak(ex)) return getPrepSec(series || STATE.activeSeries);
   var txt = ex.name + ' ' + (ex.steps || []).join(' ');
   return Math.max(MIN_PREP, Math.ceil(txt.length / 11) + 2);
 }
